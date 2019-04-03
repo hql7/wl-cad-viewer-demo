@@ -41,6 +41,7 @@
     //viewer object
     this.viewer = null;
     var vm = null;
+
     function start() {
         //option to initialize viewer.
         var options = {
@@ -64,7 +65,11 @@
             globalPromise(modelArray);
 
             viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
-                if (event.selections.length === 0) viewer.clearThemingColors();
+                if (event.selections.length === 0) {
+                    viewer.clearThemingColors();
+                    return;
+                }
+
                 var color = new THREE.Vector4(0, 0.5, 0, 1);
                 var id = event.selections[0].dbIdArray[0];
                 viewer.setThemingColor(id, color);
@@ -75,8 +80,7 @@
 
         });
 
-        Autodesk.Viewing.Private.VisibilityManager.prototype.setCurrentModel = function(model)
-        {
+        Autodesk.Viewing.Private.VisibilityManager.prototype.setCurrentModel = function (model) {
             this.model = model;
         }
 
@@ -119,7 +123,7 @@
                 function _onLoadModelSuccess(model) {
                     console.log(modelName + ': Load Model Succeeded!');
                     //新建visibilityManager的实例
-                    if(_index === 0){
+                    if (_index === 0) {
                         // vm = new Autodesk.Viewing.Private.VisibilityManager(NOP_VIEWER.impl,model );
                         // vm.setCurrentModel(model);
                         // vm.isolate(model.id);
@@ -185,7 +189,7 @@
             //全部加载完成
             console.log(result);
             // viewer.hideModel(result[0].modelObj.id)
-           viewer.hide(result[0].modelObj.id)
+            viewer.hide(result[0].modelObj.id)
 
         }, function (reason) {
             console.log(reason);
