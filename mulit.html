@@ -122,14 +122,13 @@
                 //when the model is loaded
                 function _onLoadModelSuccess(model) {
                     console.log(modelName + ': Load Model Succeeded!');
-                    //新建visibilityManager的实例
+                    // 另一种方式来隐藏需要透明的模型
                     if (_index === 0) {
                         // vm = new Autodesk.Viewing.Private.VisibilityManager(NOP_VIEWER.impl,model );
                         // vm.setCurrentModel(model);
                         // vm.isolate(model.id);
 
                     }
-
                     //delegate geometry loaded event
                     _this.viewer.addEventListener(
                         Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
@@ -188,8 +187,8 @@
         processArray(indexArr, promiseEachModel).then(function (result) {
             //全部加载完成
             console.log(result);
-            // viewer.hideModel(result[0].modelObj.id)
-            viewer.hide(result[0].modelObj.id)
+            // viewer.hideModel(result[0].modelObj.id) // 效果差
+            viewer.hide([result[0].modelObj.id, result[2].modelObj.id]); // 似乎只能一个
 
         }, function (reason) {
             console.log(reason);
