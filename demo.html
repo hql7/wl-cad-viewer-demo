@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多模型聚合</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="./static/clear.css">
+    <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+<div class="box" id="box"></div>
+<script src="static/jquery.min.js"></script>
+<script src="https://developer.api.autodesk.com/derivativeservice/v2/viewers/three.min.js?v=v2.17"></script>
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+<script>
+    var config = {
+        extensions: [
+            "Autodesk.Viewing.ZoomWindow"
+        ],
+        disabledExtensions: {
+            measure: false,
+            section: false,
+        }
+    };
+    var docs = [
+        {
+            path: "./bim/0/0.svf",
+            name: "3D"
+        },
+        {
+            path: "./bim/1/0.svf",
+            name: "3D"
+        },
+        {
+            path: "./bim/2/0.svf",
+            name: "3D"
+        }
+    ];
+    var element = document.getElementById('box');
+    var viewer = new Autodesk.Viewing.Private.GuiViewer3D(element, config);
+    var options = {
+        docid: docs[0].path,
+        env: 'Local',
+        offline: 'true',
+        useADP: false
+    };
+    Autodesk.Viewing.Initializer(options, function () {
+        viewer.initialize();
+        /*viewer.addEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            function (event) {
+                //oViewer.removeEventListener (Autodesk.Viewing.GEOMETRY_LOADED_EVENT, arguments.callee) ;
+                viewer.fitToView(true);
+                setTimeout(function () {
+                    viewer.autocam.setHomeViewFrom(viewer.navigation.getCamera());
+                }, 1000);
+            }
+        );*/
+        viewer.start();
+        for(var i =0,len = docs.length;i<len; i++){
+            viewer.loadModel(docs[i].path
+                /* , {
+                     // globalOffset: event.getData().globalOffset
+                     globalOffset: {
+                         x: 1706174.3125,
+                         y: 12271499,
+                         z:2708.371704
+                     }
+                 }*/
+                ,undefined
+                ,function (e) {
+                    console.log(e.getData());
+
+                }
+            );
+        }
+        // viewer.load(options.docid, undefined, onLoadSuccess, onLoadError);
+
+        /* viewer.addEventListener("selection", function (event) {
+             if(event.dbIdArray.length ===0) viewer.clearThemingColors();
+             var color = new THREE.Vector4(0, 0.5, 0, 1);
+             var id = event.dbIdArray[0];
+             viewer.setThemingColor(id, color);
+             console.log(event) // 当前选中信息集
+             console.log( viewer.getSelection() ) // 当前选中id
+             console.log( Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT() ) // 当前选中id
+
+         });*/
+
+        viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
+            if (event.selections.length === 0) viewer.clearThemingColors();
+            var color = new THREE.Vector4(0, 0.5, 0, 1);
+            var id = event.selections[0].dbIdArray[0];
+            viewer.setThemingColor(id, color);
+            // Inquiry();
+            console.log(event); // 当前选中信息集
+            console.log(viewer.getAggregateSelection()) // 当前选中id
+        });
+        /* viewer.navigation.setWorldUpVector(new THREE.Vector3(0, 0, 1));
+         var newPos = new THREE.Vector3(0, 0, 100);     // TBD: for some reason top and bottom views need vector to have greater length.
+         var newTarget = new THREE.Vector3(0, 0, 0);
+         viewer.navigation.setView(newPos, newTarget);
+
+         viewer.fitToView(true);
+*/
+        /*viewer.addEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            _onGeometryLoaded
+        );*/
+
+        // 获取多个模型信息
+        console.log(viewer.impl.modelQueue().getModels())
+    });
+
+    function _onGeometryLoaded(event) {
+        if (docs.length <= 0) {
+            viewer.removeEventListener(
+                Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                _onGeometryLoaded
+            );
+            return;
+        }
+
+        viewer.loadModel(docs[1].path, {globalOffset: event.model.getData().globalOffset});
+    }
+
+    function onLoadSuccess(event) {
+        console.log('success');
+        //debugger;
+        console.log(event.getData());
+        //onloadsuccess执行时tree还未加载完成
+        /*viewer.getObjectTree(function success() {
+            var instanceTree = viewer.model.getData().instanceTree;
+            var selectionMap = instanceTree.nodeAccess.dbIdToIndex;  //前台selectionid
+            for (var key in selectionMap) {
+                viewer.getProperties(selectionMap[key], function (objProp) {
+                    var goujianname = objProp.name;
+                    //工艺_设备_45561 [3315978]
+                    //获取中括号中的后台id
+                    var start = goujianname.indexOf("[");
+                    var end = goujianname.indexOf("]");
+                    if (start != undefined) {
+                        var componentId = goujianname.substring(start + 1, end);
+                        // dbid_selMap[componentId]= objProp.dbId;
+                    }
+
+                })
+            }
+            console.log("tree loaded");
+
+        }, function fail() {
+            alert("tree error");
+        });*/
+        viewer.setBackgroundColor(220, 121, 146,
+            178, 233, 154);
+        var activeToolStr = viewer.getDefaultNavigationToolName();
+        console.log(activeToolStr)
+        /*viewer.loadModel(docs[1].path
+           /!* , {
+                // globalOffset: event.getData().globalOffset
+                globalOffset: {
+                    x: 1706174.3125,
+                    y: 12271499,
+                    z:2708.371704
+                }
+            }*!/
+            ,undefined
+            ,function (e) {
+                console.log(e.getData());
+
+            }
+        );
+        viewer.loadModel(docs[2].path
+            /!* , {
+                 // globalOffset: event.getData().globalOffset
+                 globalOffset: {
+                     x: 1706174.3125,
+                     y: 12271499,
+                     z:2708.371704
+                 }
+             }*!/
+            ,undefined
+            ,function (e) {
+                console.log(e.getData());
+
+            }
+        );*/
+        /*viewer.addEventListener(
+           Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+           function (event) {
+               //oViewer.removeEventListener (Autodesk.Viewing.GEOMETRY_LOADED_EVENT, arguments.callee) ;
+               viewer.fitToView(true);
+               setTimeout(function () {
+                   viewer.autocam.setHomeViewFrom(viewer.navigation.getCamera());
+               }, 1000);
+           }
+       );*/
+    }
+
+    function onLoadError() {
+
+    }
+</script>
+</body>
+</html>

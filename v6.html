@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
+    <meta charset="utf-8">
+    <title>v6</title>
+
+    <!-- The Viewer CSS -->
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css" type="text/css">
+
+    <!-- Developer CSS -->
+    <style>
+        body {
+            margin: 0;
+        }
+        #MyViewerDiv {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-color: #F0F8FF;
+        }
+    </style>
+</head>
+<body>
+
+<!-- The Viewer will be instantiated here -->
+<div id="MyViewerDiv"></div>
+
+<!-- The Viewer JS -->
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+
+<!-- Developer JS -->
+<script>
+    var viewer;
+    var options = {
+        // env: 'AutodeskProduction',
+        // api: 'derivativeV2'    // for models uploaded to EMEA change this option to 'derivativeV2_EU'
+        env: 'Local',
+        offline: 'true',
+        useADP: false
+    };
+
+    var docs = [
+        {
+            path: "/demo/static/Resource/____/3D/3D.svf",
+            name: "3D"
+        },
+        {
+            path: "./Resource/____/3D/3D.svf",
+            name: "3D"
+        }
+    ];
+    var documentId = "./demo/static/Resource/____/3D/3D.svf"
+    Autodesk.Viewing.Initializer(options, function onInitialized(){
+        Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+    });
+
+    /**
+     * Autodesk.Viewing.Document.load() success callback.
+     * Proceeds with model initialization.
+     */
+    function onDocumentLoadSuccess(doc) {
+        console.log(doc,1111)
+
+        // A document contains references to 3D and 2D geometries.
+        var geometries = doc.getRoot().search({'type':'geometry'});
+        if (geometries.length === 0) {
+            console.error('Document contains no geometries.');
+            return;
+        }
+
+        // Choose any of the avialable geometries
+        var initGeom = geometries[0];
+
+        // Create Viewer instance
+        var viewerDiv = document.getElementById('MyViewerDiv');
+        var config = {
+            extensions: initGeom.extensions() || []
+        };
+        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+
+        // Load the chosen geometry
+        var svfUrl = doc.getViewablePath(initGeom);
+        var modelOptions = {
+            sharedPropertyDbPath: doc.getPropertyDbPath()
+        };
+        viewer.start(svfUrl, modelOptions, onLoadModelSuccess, onLoadModelError);
+    }
+
+    /**
+     * Autodesk.Viewing.Document.load() failure callback.
+     */
+    function onDocumentLoadFailure(viewerErrorCode) {
+        console.log(viewerErrorCode)
+        console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
+    }
+
+    /**
+     * viewer.loadModel() success callback.
+     * Invoked after the model's SVF has been initially loaded.
+     * It may trigger before any geometry has been downloaded and displayed on-screen.
+     */
+    function onLoadModelSuccess(model) {
+        console.log('onLoadModelSuccess()!');
+        console.log('Validate model loaded: ' + (viewer.model === model));
+        console.log(model);
+    }
+
+    /**
+     * viewer.loadModel() failure callback.
+     * Invoked when there's an error fetching the SVF file.
+     */
+    function onLoadModelError(viewerErrorCode) {
+        console.error('onLoadModelError() - errorCode:' + viewerErrorCode);
+    }
+
+</script>
+</body>
+</html>

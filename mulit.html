@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多模型有序聚合</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="./static/clear.css">
+</head>
+<body>
+<div id="myViewer"></div>
+<script src="static/jquery.min.js"></script>
+<script src="https://developer.api.autodesk.com/derivativeservice/v2/viewers/three.min.js?v=v2.17"></script>
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+<script>
+    // (function () {
+    //replace with your own urns
+    this.urn_model1 = "./bim/0/0.svf";
+    this.urn_model2 = "./bim/2/0.svf";
+    this.urn_model3 = "./bim/1/0.svf";
+
+    //model info array
+    this.modelArray = [
+        {
+            modelName: 'urn_model1',
+            path: urn_model1,
+            modelObj: null
+        },
+        {
+            modelName: 'urn_model2',
+            path: urn_model2,
+            modelObj: null
+        },
+        {
+            modelName: 'urn_model3',
+            path: urn_model3,
+            modelObj: null
+        }
+    ];
+
+    //viewer object
+    this.viewer = null;
+    var vm = null;
+    function start() {
+        //option to initialize viewer.
+        var options = {
+            // env: 'AutodeskProduction',
+            // accessToken: token
+            env: 'Local',
+            offline: 'true',
+            useADP: false,
+        };
+
+        //It looks the static function of Viewer does not support ES6
+        //still use ES5
+
+        Autodesk.Viewing.Initializer(options, function onInitialized() {
+
+            //get the viewer div
+            var viewerDiv = document.getElementById('myViewer');
+            //initialize the viewer object
+            viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, {});
+            //load model one by one in sequence
+            globalPromise(modelArray);
+
+            viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
+                if (event.selections.length === 0) viewer.clearThemingColors();
+                var color = new THREE.Vector4(0, 0.5, 0, 1);
+                var id = event.selections[0].dbIdArray[0];
+                viewer.setThemingColor(id, color);
+                // Inquiry();
+                console.log(event); // 当前选中信息集
+                console.log(viewer.getAggregateSelection()) // 当前选中id
+            });
+
+        });
+
+        Autodesk.Viewing.Private.VisibilityManager.prototype.setCurrentModel = function(model)
+        {
+            this.model = model;
+        }
+
+
+    }
+
+    //load model by promise
+    globalPromise = (modelArray) => {
+
+        var _this = this;
+
+        //each promise function
+        //input the index of model array
+
+        function promiseEachModel(index) {
+            return new Promise((resolve, reject) => {
+                var modelName = modelArray[index].modelName;
+                var _index = index;
+                //when the document is loaded
+                /* function _onDocumentLoadSuccess(doc) {
+
+                     console.log(modelName +
+                         ': Document Load Succeeded!');
+                     _this.globalDocumentLoad(doc,
+                         _onLoadModelSuccess,
+                         _onLoadModelError);
+                 };*/
+                _this.globalDocumentLoad(modelArray[index].path,
+                    _onLoadModelSuccess,
+                    _onLoadModelError);
+
+                //when the document failed to be loaded
+                function _onDocumentLoadFailure(viewerErrorCode) {
+                    console.error(modelName +
+                        ': Document Load Failure, errorCode:' +
+                        viewerErrorCode);
+                }
+
+                //when the model is loaded
+                function _onLoadModelSuccess(model) {
+                    console.log(modelName + ': Load Model Succeeded!');
+                    //新建visibilityManager的实例
+                    if(_index === 0){
+                        // vm = new Autodesk.Viewing.Private.VisibilityManager(NOP_VIEWER.impl,model );
+                        // vm.setCurrentModel(model);
+                        // vm.isolate(model.id);
+
+                    }
+
+                    //delegate geometry loaded event
+                    _this.viewer.addEventListener(
+                        Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                        _onGeometryLoaded);
+
+                    //map this item with the corresponding model in case of use
+                    modelArray[index].modelObj = model
+                }
+
+                function _onLoadModelError(viewerErrorCode) {
+                    console.error(modelName +
+                        ': Load Model Error, errorCode:' +
+                        viewerErrorCode);
+                    //any error
+                    reject(modelName + ' Loading Failed!' + viewerErrorCode);
+                }
+
+                function _onGeometryLoaded(evt) {
+                    //_this.globalGeometryLoaded(modelName,evt.model);
+                    _this.viewer.removeEventListener(
+                        Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                        _onGeometryLoaded);
+                    console.log(modelName + '  Geometry Loaded!');
+                    resolve(modelArray[index]);
+                }
+
+
+                //load the model
+                /*Autodesk.Viewing.Document.load(
+                    modelArray[index].path,
+                    _onDocumentLoadSuccess,
+                    _onDocumentLoadFailure);*/
+
+            }); //end of new promise
+
+        } //end of each promise function
+
+        //build the index array
+        var indexArr = [0, 1, 2];
+
+        //proces each promise
+        //refer to http://jsfiddle.net/jfriend00/h3zaw8u8/
+        function processArray(array, fn) {
+            var results = [];
+            return array.reduce(function (p, item) {
+                return p.then(function () {
+                    return fn(item).then(function (data) {
+                        results.push(data);
+                        return results;
+                    });
+                });
+            }, Promise.resolve());
+        }
+
+        //start to process
+        processArray(indexArr, promiseEachModel).then(function (result) {
+            //全部加载完成
+            console.log(result);
+            // viewer.hideModel(result[0].modelObj.id)
+           viewer.hide(result[0].modelObj.id)
+
+        }, function (reason) {
+            console.log(reason);
+        });
+    }; //end of function globalPromise
+
+
+    //when document is being loaded
+    globalDocumentLoad = (doc, _onLoadModelSuccess, _onLoadModelError) => {
+        //get available viewables
+        /* var viewables = Autodesk.Viewing.Document.getSubItemsWithProperties(
+             doc.getRootItem(), {
+                 'type': 'geometry'
+             }, true);
+         if (viewables.length === 0) {
+             console.error('Document contains no viewables.');
+             return;
+         }*/
+
+        // Choose the first avialble viewables
+        /*var initialViewable = viewables[0];
+        var svfUrl = doc.getViewablePath(initialViewable);*/
+
+        var mat = new THREE.Matrix4();
+        //input the transformation
+        var loadOptions = {
+            placementTransform: mat,
+            /*globalOffset: {
+                x: 0,
+                y: 0,
+                z: 0
+            }, // to align the models*/
+            // sharedPropertyDbPath: doc.getPropertyDbPath()
+        };
+
+        //if this is the first model
+        if (doc === this.urn_model1) {
+            //load the first model
+            this.viewer.start(doc,
+                loadOptions,
+                _onLoadModelSuccess,
+                _onLoadModelError);
+
+        } else {
+            //other models
+            this.viewer.loadModel(doc,
+                loadOptions,
+                _onLoadModelSuccess,
+                _onLoadModelError);
+        }
+    };
+
+    start();
+    // }())
+</script>
+</body>
+</html>
