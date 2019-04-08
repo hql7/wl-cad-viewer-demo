@@ -1,119 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
-    <meta charset="utf-8">
-    <title>v6</title>
-
-    <!-- The Viewer CSS -->
-    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css" type="text/css">
-
-    <!-- Developer CSS -->
-    <style>
-        body {
-            margin: 0;
-        }
-        #MyViewerDiv {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            background-color: #F0F8FF;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>多模型无序聚合</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="./static/clear.css">
 </head>
 <body>
-
-<!-- The Viewer will be instantiated here -->
-<div id="MyViewerDiv"></div>
-
-<!-- The Viewer JS -->
+<div id="myViewer"></div>
+<script src="static/jquery.min.js"></script>
+<script src="https://developer.api.autodesk.com/derivativeservice/v2/viewers/three.min.js?v=v2.17"></script>
 <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
-
-<!-- Developer JS -->
 <script>
-    var viewer;
-    var options = {
-        // env: 'AutodeskProduction',
-        // api: 'derivativeV2'    // for models uploaded to EMEA change this option to 'derivativeV2_EU'
-        env: 'Local',
-        offline: 'true',
-        useADP: false
-    };
+    (function () {
+        //replace with your own urns
+        var urn_model1 = "./cailiao/Resource/3D_View/_3D_ 1481884/_3D_.svf";
+        var urn_model2 = "./cailiao/sports/0.svf";
+        var urn_model3 = "./cailiao/ferrari/Ferrari Enzo.svf";
+        var urn_model4 = "./cailiao/mining/Mining Truck.svf";
+        var urn_model5 = "./cailiao/travel/0.svf";
+        var urn_model6 = "./cailiao/lrt/0.svf";
+        var urn_model7 = "./cailiao/house/1.svf";
+        var urn_model8 = "./cailiao/bbb/design.svf";
 
-    var docs = [
-        {
-            path: "/demo/static/Resource/____/3D/3D.svf",
-            name: "3D"
-        },
-        {
-            path: "./Resource/____/3D/3D.svf",
-            name: "3D"
-        }
-    ];
-    var documentId = "./demo/static/Resource/____/3D/3D.svf"
-    Autodesk.Viewing.Initializer(options, function onInitialized(){
-        Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
-    });
+        //model info array
+        var modelArray = [
+            {
+                modelName: 'urn_model1',
+                path: urn_model3,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            },
+            {
+                modelName: 'urn_model2',
+                path: urn_model7,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            },
+            {
+                modelName: 'urn_model3',
+                path: urn_model4,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            },
+            /*
+            {
+                modelName: 'urn_model3',
+                path: urn_model3,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            },
+            {
+                modelName: 'urn_model4',
+                path: urn_model4,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            },
+            {
+                modelName: 'urn_model5',
+                path: urn_model5,
+                modelObj: null,
+                globalOffset: {
+                    x: null,
+                    y: null,
+                    z: null
+                }
+            }*/
+        ];
 
-    /**
-     * Autodesk.Viewing.Document.load() success callback.
-     * Proceeds with model initialization.
-     */
-    function onDocumentLoadSuccess(doc) {
-        console.log(doc,1111)
-
-        // A document contains references to 3D and 2D geometries.
-        var geometries = doc.getRoot().search({'type':'geometry'});
-        if (geometries.length === 0) {
-            console.error('Document contains no geometries.');
-            return;
-        }
-
-        // Choose any of the avialable geometries
-        var initGeom = geometries[0];
-
-        // Create Viewer instance
-        var viewerDiv = document.getElementById('MyViewerDiv');
-        var config = {
-            extensions: initGeom.extensions() || []
+        //viewer object
+        var viewer = null;
+        var mat = new THREE.Matrix4();
+        var loadOptions = {
+            placementTransform: mat,
+            /*globalOffset: {
+                x: 0,
+                y: 0,
+                z: 0
+            }, // to align the models*/
+            // sharedPropertyDbPath: doc.getPropertyDbPath()
         };
-        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
 
-        // Load the chosen geometry
-        var svfUrl = doc.getViewablePath(initGeom);
-        var modelOptions = {
-            sharedPropertyDbPath: doc.getPropertyDbPath()
-        };
-        viewer.start(svfUrl, modelOptions, onLoadModelSuccess, onLoadModelError);
-    }
+        function start() {
+            //option to initialize viewer.
+            var options = {
+                env: 'Local',
+                offline: 'true',
+                useADP: false,
+            };
 
-    /**
-     * Autodesk.Viewing.Document.load() failure callback.
-     */
-    function onDocumentLoadFailure(viewerErrorCode) {
-        console.log(viewerErrorCode)
-        console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
-    }
+            //It looks the static function of Viewer does not support ES6
+            //still use ES5
 
-    /**
-     * viewer.loadModel() success callback.
-     * Invoked after the model's SVF has been initially loaded.
-     * It may trigger before any geometry has been downloaded and displayed on-screen.
-     */
-    function onLoadModelSuccess(model) {
-        console.log('onLoadModelSuccess()!');
-        console.log('Validate model loaded: ' + (viewer.model === model));
-        console.log(model);
-    }
+            Autodesk.Viewing.Initializer(options, function onInitialized() {
+                //get the viewer div
+                var viewerDiv = document.getElementById('myViewer');
+                //initialize the viewer object
+                viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, {
+                    extensions: ["Autodesk.Viewing.MarkupsCore", "Autodesk.Viewing.ZoomWindow"]
+                });
+                //load model one by one in sequence
+                for (var i = 0, len = modelArray.length; i < len; i++) {
+                    EachModel(modelArray[i], i)
+                }
 
-    /**
-     * viewer.loadModel() failure callback.
-     * Invoked when there's an error fetching the SVF file.
-     */
-    function onLoadModelError(viewerErrorCode) {
-        console.error('onLoadModelError() - errorCode:' + viewerErrorCode);
-    }
+                /*viewer.addEventListener(
+                    Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                    function (event) {
+                        //oViewer.removeEventListener (Autodesk.Viewing.GEOMETRY_LOADED_EVENT, arguments.callee) ;
+                        viewer.fitToView(true);
+                        setTimeout(function () {
+                            viewer.autocam.setHomeViewFrom(viewer.navigation.getCamera());
+                        }, 1000);
+                    }
+                );*/
+                viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
+                    /*_viewer.navigation.setWorldUpVector(new THREE.Vector3(0, 0, 1));
 
+                    var newPos = new THREE.Vector3(0, 0, -100);
+                    var newTarget = new THREE.Vector3(0, 0, 0);
+                    _viewer.navigation.setView(newPos, newTarget);
+
+                    _viewer.fitToView(true);*/
+                    if (event.selections.length === 0) {
+                        // viewer.clearThemingColors();
+                        return;
+                    }
+
+                    var color = new THREE.Vector4(0, 0.5, 0, 1);
+                    var id = event.selections[0].dbIdArray[0];
+                    viewer.setThemingColor(id, color);
+                    // Inquiry();
+                    console.log(event); // 当前选中信息集
+                    console.log(viewer.getAggregateSelection()) // 当前选中id
+                });
+            });
+        }
+
+        function EachModel(item, index) {
+            if (index !== 0) {
+                var op = item.modelName === "urn_model3" ? { globalOffset: {x: 17.999999499999998,
+                        y: 205.230027000000003,
+                        z: -28.148967999999996}} : loadOptions;
+                viewer.loadModel(item.path,
+                    op,
+                    _onLoadModelSuccess,
+                    _onLoadModelError);
+            } else {
+                viewer.start(item.path,
+                    loadOptions,
+                    _onLoadModelSuccess,
+                    _onLoadModelError);
+            }
+
+            function _onLoadModelSuccess(model) {
+                modelArray[index].modelObj = model;
+                viewer.addEventListener(
+                    Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                    _onGeometryLoaded);
+                //map this item with the corresponding model in case of use
+            }
+
+            function _onLoadModelError(viewerErrorCode) {
+                console.error(modelName +
+                    ': Load Model Error, errorCode:' +
+                    viewerErrorCode);
+                //any error
+            }
+
+            function _onGeometryLoaded(evt) {
+                // if (item.modelName === "urn_model1") {
+                    console.log(item)
+                    viewer.fitToView(evt.model.id)
+                    var red = new THREE.Vector4(0, 0.5, 0, 0.5);
+                    var it = evt.model.getData().instanceTree;
+                    // viewer.setThemingColor(it.nodeAccess.rootId, red);
+                    console.log(it.nodeAccess.rootId)
+                    console.log(it)
+                    for (var i in it.nodeAccess.dbIdToIndex) {
+                        viewer.setThemingColor(i, red, evt.model);
+                    }
+                // } else {
+                    viewer.hide(evt.model.id, evt.model);
+                // }
+
+
+                viewer.removeEventListener(
+                    Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                    _onGeometryLoaded);
+            }
+        }
+
+        // 调用
+        start();
+    }())
 </script>
 </body>
 </html>

@@ -13,204 +13,342 @@
 <script src="https://developer.api.autodesk.com/derivativeservice/v2/viewers/three.min.js?v=v2.17"></script>
 <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
 <script>
-    // (function () {
-    //replace with your own urns
-    this.urn_model1 = "./bim/0/0.svf";
-    this.urn_model2 = "./bim/2/0.svf";
-    this.urn_model3 = "./bim/1/0.svf";
+    (function () {
+        //replace with your own urns
+        this.urn_model1 = "./bim/1/0.svf";
+        this.urn_model2 = "./bim/2/0.svf";
+        this.urn_model3 = "./bim/3/0.svf";
+        this.urn_model4 = "./bim/4/0.svf";
+        this.urn_model5 = "./bim/0/0.svf";
+        this.urn_model6 = "./bim/6/0.svf";
 
-    //model info array
-    this.modelArray = [
-        {
-            modelName: 'urn_model1',
-            path: urn_model1,
-            modelObj: null
-        },
-        {
-            modelName: 'urn_model2',
-            path: urn_model2,
-            modelObj: null
-        },
-        {
-            modelName: 'urn_model3',
-            path: urn_model3,
-            modelObj: null
-        }
-    ];
+        //model info array
+        this.modelArray = [
+            {
+                modelName: 'urn_model1',
+                path: urn_model1,
+                modelObj: null
+            },
+            {
+                modelName: 'urn_model2',
+                path: urn_model2,
+                modelObj: null
+            },
+            {
+                modelName: 'urn_model3',
+                path: urn_model3,
+                modelObj: null
+            },
+            {
+                modelName: 'urn_model4',
+                path: urn_model4,
+                modelObj: null
+            },
+            {
+                modelName: 'urn_model5',
+                path: urn_model5,
+                modelObj: null
+            }
+        ];
 
-    //viewer object
-    this.viewer = null;
-    var vm = null;
+        //viewer object
+        this.viewer = null;
 
-    function start() {
-        //option to initialize viewer.
-        var options = {
-            // env: 'AutodeskProduction',
-            // accessToken: token
-            env: 'Local',
-            offline: 'true',
-            useADP: false,
-        };
+        function start() {
+            //option to initialize viewer.
+            var options = {
+                env: 'Local',
+                offline: 'true',
+                useADP: false,
+            };
 
-        //It looks the static function of Viewer does not support ES6
-        //still use ES5
+            //It looks the static function of Viewer does not support ES6
+            //still use ES5
 
-        Autodesk.Viewing.Initializer(options, function onInitialized() {
+            Autodesk.Viewing.Initializer(options, function onInitialized() {
+                //get the viewer div
+                var viewerDiv = document.getElementById('myViewer');
+                //initialize the viewer object
+                viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, {
+                    extensions: ["Autodesk.Viewing.MarkupsCore", "Autodesk.Viewing.ZoomWindow"]
+                });
+                //load model one by one in sequence
+                globalPromise(modelArray);
+                viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
+                    /*_viewer.navigation.setWorldUpVector(new THREE.Vector3(0, 0, 1));
 
-            //get the viewer div
-            var viewerDiv = document.getElementById('myViewer');
-            //initialize the viewer object
-            viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, {});
-            //load model one by one in sequence
-            globalPromise(modelArray);
+                    var newPos = new THREE.Vector3(0, 0, -100);
+                    var newTarget = new THREE.Vector3(0, 0, 0);
+                    _viewer.navigation.setView(newPos, newTarget);
 
-            viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
-                if (event.selections.length === 0) {
-                    viewer.clearThemingColors();
-                    return;
-                }
+                    _viewer.fitToView(true);*/
+                    if (event.selections.length === 0) {
+                        viewer.clearThemingColors();
+                        return;
+                    }
 
-                var color = new THREE.Vector4(0, 0.5, 0, 1);
-                var id = event.selections[0].dbIdArray[0];
-                viewer.setThemingColor(id, color);
-                // Inquiry();
-                console.log(event); // 当前选中信息集
-                console.log(viewer.getAggregateSelection()) // 当前选中id
+                    var color = new THREE.Vector4(0, 0.5, 0, 1);
+                    var id = event.selections[0].dbIdArray[0];
+                    viewer.setThemingColor(id, color);
+                    // Inquiry();
+                    console.log(event); // 当前选中信息集
+                    console.log(viewer.getAggregateSelection()) // 当前选中id
+
+                    /* var hitTest = viewer.clientToWorld(event.offsetX,event.offsetY, false);
+                     console.log(hitTest)
+                      const markupInfo = {
+                          fragId: hitTest.fragId,
+                          point: hitTest.point,
+                          dbId: hitTest.dbId,
+                          size: 40
+                      }
+                      var markup = new pointcloudmarkup(viewer, options);
+                      markup.addMarkup(markupInfo);
+                      markup.startAnimation();
+                       const loop = (t) => {
+                           window.requestAnimationFrame(loop);
+                           this.markup.update(t);
+                       };
+                       loop(0.0);*/
+                });
+
             });
 
-        });
-
-        Autodesk.Viewing.Private.VisibilityManager.prototype.setCurrentModel = function (model) {
-            this.model = model;
-        }
-
-
-    }
-
-    //load model by promise
-    globalPromise = (modelArray) => {
-
-        var _this = this;
-
-        //each promise function
-        //input the index of model array
-
-        function promiseEachModel(index) {
-            return new Promise((resolve, reject) => {
-                var modelName = modelArray[index].modelName;
-                var _index = index;
-                //when the document is loaded
-                /* function _onDocumentLoadSuccess(doc) {
-
-                     console.log(modelName +
-                         ': Document Load Succeeded!');
-                     _this.globalDocumentLoad(doc,
-                         _onLoadModelSuccess,
-                         _onLoadModelError);
-                 };*/
-                _this.globalDocumentLoad(modelArray[index].path,
-                    _onLoadModelSuccess,
-                    _onLoadModelError);
-
-                //when the document failed to be loaded
-                function _onDocumentLoadFailure(viewerErrorCode) {
-                    console.error(modelName +
-                        ': Document Load Failure, errorCode:' +
-                        viewerErrorCode);
+            // 旋转扩展
+            class RotateExt extends Autodesk.Viewing.Extension {
+                constructor(viewer, options) {
+                    super();
                 }
 
-                //when the model is loaded
-                function _onLoadModelSuccess(model) {
-                    console.log(modelName + ': Load Model Succeeded!');
-                    // 另一种方式来隐藏需要透明的模型
-                    if (_index === 0) {
-                        // vm = new Autodesk.Viewing.Private.VisibilityManager(NOP_VIEWER.impl,model );
-                        // vm.setCurrentModel(model);
-                        // vm.isolate(model.id);
-
-                    }
-                    //delegate geometry loaded event
-                    _this.viewer.addEventListener(
-                        Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
-                        _onGeometryLoaded);
-
-                    //map this item with the corresponding model in case of use
-                    modelArray[index].modelObj = model
+                load() {
+                    viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+                    return true;
                 }
 
-                function _onLoadModelError(viewerErrorCode) {
-                    console.error(modelName +
-                        ': Load Model Error, errorCode:' +
-                        viewerErrorCode);
-                    //any error
-                    reject(modelName + ' Loading Failed!' + viewerErrorCode);
+                unload() {
+                    viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+                    return true;
                 }
 
-                function _onGeometryLoaded(evt) {
-                    //_this.globalGeometryLoaded(modelName,evt.model);
-                    _this.viewer.removeEventListener(
-                        Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
-                        _onGeometryLoaded);
-                    console.log(modelName + '  Geometry Loaded!');
-                    resolve(modelArray[index]);
-                }
+                /**!
+                 * 关键函数
+                 */
+                onSelectionChanged(event) {
+                    console.log(event, 1)
+                    const quaternion = new THREE.Quaternion();
+                    // 设置旋转量 - 依 Y 轴旋转构件 180 度
+                    quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
 
+                    const model = event.model;
+                    const fragIdsArray = event.fragIdsArray;
 
-                //load the model
-                /*Autodesk.Viewing.Document.load(
-                    modelArray[index].path,
-                    _onDocumentLoadSuccess,
-                    _onDocumentLoadFailure);*/
+                    fragIdsArray.forEach((fragId, idx) => {
+                        const fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
 
-            }); //end of new promise
+                        fragProxy.getAnimTransform();
 
-        } //end of each promise function
+                        const position = new THREE.Vector3(fragProxy.position.x, fragProxy.position.y, fragProxy.position.z);
+                        position.applyQuaternion(quaternion);
 
-        //build the index array
-        var indexArr = [0, 1, 2];
+                        fragProxy.position = position;
+                        fragProxy.quaternion.multiplyQuaternions(quaternion, fragProxy.quaternion);
 
-        //proces each promise
-        //refer to http://jsfiddle.net/jfriend00/h3zaw8u8/
-        function processArray(array, fn) {
-            var results = [];
-            return array.reduce(function (p, item) {
-                return p.then(function () {
-                    return fn(item).then(function (data) {
-                        results.push(data);
-                        return results;
+                        if (idx === 0) {
+                            const euler = new THREE.Euler();
+                            euler.setFromQuaternion(fragProxy.quaternion, 0);
+                        }
+
+                        fragProxy.updateAnimTransform();
                     });
-                });
-            }, Promise.resolve());
+
+                    this.viewer.impl.sceneUpdated(true);
+                };
+            }
+
+            // 注册旋转扩展
+            Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.RotateTool', RotateExt);
+
+            // 移动扩展
+            class TranslateExt extends Autodesk.Viewing.Extension {
+                constructor(viewer, options) {
+                    super();
+                }
+
+                load() {
+                    viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+                    return true;
+                }
+
+                unload() {
+                    viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+                    return true;
+                }
+
+                /**!
+                 * 关键函数
+                 */
+                onSelectionChanged(event) {
+
+                    // 设置移动量 - 向 X 轴移动 -100 单位
+                    const offset = new THREE.Vector3(-100, 0, 0);
+
+                    const model = event.model;
+                    const fragIdsArray = event.fragIdsArray;
+
+                    fragIdsArray.forEach((fragId, idx) => {
+                        const fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
+
+                        fragProxy.getAnimTransform();
+
+                        const position = new THREE.Vector3(
+                            fragProxy.position.x + offset.x,
+                            fragProxy.position.y + offset.y,
+                            fragProxy.position.z + offset.z
+                        );
+
+                        fragProxy.position = position;
+
+                        fragProxy.updateAnimTransform();
+                    });
+
+                    this.viewer.impl.sceneUpdated(true);
+                };
+            }
+
+            // 注册移动扩展
+            Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.TranslateTool', TranslateExt);
         }
 
-        //start to process
-        processArray(indexArr, promiseEachModel).then(function (result) {
-            //全部加载完成
-            console.log(result);
-            // viewer.hideModel(result[0].modelObj.id) // 效果差
-            viewer.hide([result[0].modelObj.id, result[2].modelObj.id]); // 似乎只能一个
+        //load model by promise
+        globalPromise = (modelArray) => {
+            var _this = this;
 
-        }, function (reason) {
-            console.log(reason);
-        });
-    }; //end of function globalPromise
+            //each promise function
+            //input the index of model array
 
+            function promiseEachModel(index) {
+                return new Promise((resolve, reject) => {
+                    var modelName = modelArray[index].modelName;
+                    var _index = index;
 
-    //when document is being loaded
-    globalDocumentLoad = (doc, _onLoadModelSuccess, _onLoadModelError) => {
-        //get available viewables
-        /* var viewables = Autodesk.Viewing.Document.getSubItemsWithProperties(
-             doc.getRootItem(), {
-                 'type': 'geometry'
-             }, true);
-         if (viewables.length === 0) {
-             console.error('Document contains no viewables.');
-             return;
-         }*/
+                    _this.globalDocumentLoad(modelArray[index].path,
+                        _onLoadModelSuccess,
+                        _onLoadModelError);
 
-        // Choose the first avialble viewables
-        /*var initialViewable = viewables[0];
-        var svfUrl = doc.getViewablePath(initialViewable);*/
+                    //when the model is loaded
+                    function _onLoadModelSuccess(model) {
+                        if (index === 0) {
+                            /*console.log("model.geomPolyCount: %f", model.geomPolyCount());
+                            console.log("model.getBoundingBox: %O", model.getBoundingBox());
+                            console.log("model.getData : %O", model.getData());
+                            console.log("model.getDefaultCamera: %O", model.getDefaultCamera());
+                            // console.log("model.getLayersRoot: %O", model.getLayersRoot());
+                            console.log("model.getRoot: %O", model.getRoot ());
+                            console.log("model.getRootId : %f", model.getRootId());
+                            console.log("model.getUnitScale: %f", model.getUnitScale());
+                            console.log("model.getUnitString: %s", model.getUnitString());
+                            console.log("model.getUpVector: %O", model.getUpVector());
+                            console.log("model.instancePolyCount: %f", model.instancePolyCount());
+                            console.log("model.is2d: %s", model.is2d());
+                            console.log("model.isLoadDone: %s", model.isLoadDone());
+                            console.log("model.isObjectTreeCreated: %s", model.isObjectTreeCreated());*/
+                        }
+                        _this.viewer.addEventListener(
+                            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                            _onGeometryLoaded);
+
+                        //map this item with the corresponding model in case of use
+                        modelArray[index].modelObj = model
+                    }
+
+                    function _onLoadModelError(viewerErrorCode) {
+                        console.error(modelName +
+                            ': Load Model Error, errorCode:' +
+                            viewerErrorCode);
+                        //any error
+                        reject(modelName + ' Loading Failed!' + viewerErrorCode);
+                    }
+
+                    function _onGeometryLoaded(evt) {
+                        if (!["urn_model2", "urn_model5"].includes(modelArray[index].modelName)){
+                            _this.viewer.fitToView(evt.model.id)
+                            var red = new THREE.Vector4(0, 0.5, 0, 0.5);
+                            var it = evt.model.getData().instanceTree;
+                            // viewer.setThemingColor(it.nodeAccess.rootId, red);
+                            console.log(it.nodeAccess.rootId)
+                            console.log(it)
+                            for (var i in it.nodeAccess.dbIdToIndex) {
+                                _this.viewer.setThemingColor(i, red, evt.model);
+                            }
+                        }
+                        _this.viewer.removeEventListener(
+                            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                            _onGeometryLoaded);
+                        resolve(modelArray[index]);
+                    }
+                }); //end of new promise
+            } //end of each promise function
+
+            //build the index array
+            var indexArr = [0, 1, 2, 3];
+
+            //proces each promise
+            //refer to http://jsfiddle.net/jfriend00/h3zaw8u8/
+            function processArray(array, fn) {
+                var results = [];
+                return array.reduce(function (p, item) {
+                    return p.then(function () {
+                        return fn(item).then(function (data) {
+                            results.push(data);
+                            return results;
+                        });
+                    });
+                }, Promise.resolve());
+            }
+
+            //start to process
+            processArray(indexArr, promiseEachModel).then(function (result) {
+                //全部加载完成
+                console.log(result);
+                result.forEach(item => { // 透明目标模型
+                    if (["urn_model4"].includes(item.modelName)) viewer.hide(item.modelObj.id, item.modelObj);
+                })
+
+                // var old_globalOffset = result[0].modelObj.getData().globalOffset;
+                /*result[0].modelObj.setData({
+                    globalOffset:{
+                        x: old_globalOffset.x + 1000,
+                        y: old_globalOffset.y + 1000,
+                        z: old_globalOffset.z + 100,
+                    }
+                })*/
+                // 设置移动量 - 向 X 轴移动 -100 单位
+                /* const offset = new THREE.Vector3(-1000, 1000, 450);
+                 const model_ = result[0].modelObj;
+                 const fragIdsArray =  getLeafFragIds (
+                     model_, model_.id);
+                 console.log(fragIdsArray)
+                 // console.log(viewer.impl)
+                 fragIdsArray.forEach((fragId, idx) => {
+                     const fragProxy = viewer.impl.getFragmentProxy(model_, fragId);
+
+                     fragProxy.getAnimTransform();
+
+                     const position = new THREE.Vector3(
+                         fragProxy.position.x + offset.x,
+                         fragProxy.position.y + offset.y,
+                         fragProxy.position.z + offset.z
+                     );
+
+                     fragProxy.position = position;
+
+                     fragProxy.updateAnimTransform();
+                 });
+                 viewer.impl.sceneUpdated(true);*/
+            }, function (reason) {
+                console.log(reason);
+            });
+        }; //end of function globalPromise
 
         var mat = new THREE.Matrix4();
         //input the transformation
@@ -223,26 +361,38 @@
             }, // to align the models*/
             // sharedPropertyDbPath: doc.getPropertyDbPath()
         };
+        //when document is being loaded
+        globalDocumentLoad = (doc, _onLoadModelSuccess, _onLoadModelError) => {
+            //if this is the first model
+            if (doc === this.urn_model1) {
+                //load the first model
+                this.viewer.start(doc,
+                    loadOptions,
+                    _onLoadModelSuccess,
+                    _onLoadModelError);
 
-        //if this is the first model
-        if (doc === this.urn_model1) {
-            //load the first model
-            this.viewer.start(doc,
-                loadOptions,
-                _onLoadModelSuccess,
-                _onLoadModelError);
+            } else {
+                //other models
+                this.viewer.loadModel(doc,
+                    loadOptions,
+                    _onLoadModelSuccess,
+                    _onLoadModelError);
+            }
+        };
 
-        } else {
-            //other models
-            this.viewer.loadModel(doc,
-                loadOptions,
-                _onLoadModelSuccess,
-                _onLoadModelError);
+        // 根据model获取FragIds
+        function getLeafFragIds(model, leafId) {
+            const instanceTree = model.getData().instanceTree;
+            const fragIds = [];
+            instanceTree.enumNodeFragments(leafId, function (fragId) {
+                fragIds.push(fragId);
+            });
+            return fragIds;
         }
-    };
 
-    start();
-    // }())
+        // 调用
+        start();
+    }())
 </script>
 </body>
 </html>

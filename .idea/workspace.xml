@@ -2,11 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="345dd6a6-f601-4c23-87f4-f2dd2b3184db" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/0.pf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/0.pf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/0.svf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/0.svf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/0.svf.png" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/0.svf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/1.pf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/1.pf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/2.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/3.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/4.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/5.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/6.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/7.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/8.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/9.pf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/CameraDefinitions.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/CameraDefinitions.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/FragmentList.pack" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/FragmentList.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/GeometryMetadata.pf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/GeometryMetadata.pf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/InstanceTree.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/InstanceTree.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/Materials.json.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_attrs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/objects_attrs.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_avs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/objects_avs.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_ids.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/objects_ids.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_offs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/objects_offs.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_vals.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/0/objects_vals.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bim/0/objects_viewables.json.gz" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mulit.html" beforeDir="false" afterPath="$PROJECT_DIR$/mulit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v6.html" beforeDir="false" afterPath="$PROJECT_DIR$/v6.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,21 +40,60 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="mulit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mulit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="648">
-              <caret line="203" column="35" lean-forward="true" selection-start-line="203" selection-start-column="35" selection-end-line="203" selection-end-column="35" />
+            <state relative-caret-position="330">
+              <caret line="298" column="56" lean-forward="true" selection-start-line="298" selection-start-column="56" selection-end-line="298" selection-end-column="56" />
+              <folding>
+                <element signature="e#4316#6234#0" />
+                <element signature="e#6413#7986#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="v6.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/v6.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="23" column="47" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="47" />
+              <folding>
+                <element signature="e#2629#4263#0" />
+                <element signature="e#6242#6440#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="demo.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="188" column="34" selection-start-line="188" selection-start-column="34" selection-end-line="188" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>isolate</find>
+      <find>onSelectionChanged</find>
+      <find>_onGeometryLoaded</find>
+      <find>promiseEachModel</find>
+      <find>viewer</find>
+      <find>globalDocumentLoad</find>
+      <find>urn_model1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -43,6 +103,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/ani.html" />
+        <option value="$PROJECT_DIR$/v6.html" />
         <option value="$PROJECT_DIR$/mulit.html" />
       </list>
     </option>
@@ -55,8 +117,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1912" />
+    <option name="y" value="1" />
     <option name="width" value="1936" />
-    <option name="height" value="1081" />
+    <option name="height" value="1079" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -70,6 +133,16 @@
               <item name="autodesk-viewer-mulit" type="b2602c69:ProjectViewProjectNode" />
               <item name="autodesk-viewer-mulit" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="autodesk-viewer-mulit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autodesk-viewer-mulit" type="462c0819:PsiDirectoryNode" />
+              <item name="bim" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autodesk-viewer-mulit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autodesk-viewer-mulit" type="462c0819:PsiDirectoryNode" />
+              <item name="cailiao" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -78,8 +151,9 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../viewer-nodejs-typeview.sample" />
     <property name="node.js.detected.package.prettier" value="true" />
     <property name="node.js.path.for.package.prettier" value="project" />
     <property name="node.js.selected.package.prettier" value="" />
@@ -87,7 +161,11 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\autodesk\autodesk-viewer-mulit\cailiao\ferrari" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\autodesk\autodesk-viewer-mulit\cailiao" />
       <recent name="G:\autodesk\autodesk-viewer-mulit" />
     </key>
   </component>
@@ -113,34 +191,35 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1554275200234</updated>
-      <workItem from="1554275201893" duration="4654000" />
+      <workItem from="1554275201893" duration="6047000" />
+      <workItem from="1554339444079" duration="18831000" />
+      <workItem from="1554684304695" duration="20628000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4654000" />
+    <option name="totallyTimeSpent" value="45506000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="0" width="1936" height="1081" extended-state="0" />
-    <editor active="true" />
+    <frame x="1912" y="1" width="1936" height="1079" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Version Control" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +229,28 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/mulit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7230">
+          <caret line="241" column="79" lean-forward="true" selection-start-line="241" selection-start-column="79" selection-end-line="241" selection-end-column="79" />
+          <folding>
+            <element signature="e#4316#6234#0" />
+            <element signature="e#6413#7986#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mulit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8070">
+          <caret line="269" column="42" lean-forward="true" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
+          <folding>
+            <element signature="e#4316#6234#0" />
+            <element signature="e#6413#7986#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -164,10 +265,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bim/5/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1777">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2241" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ani.html" />
+    <entry file="file://$PROJECT_DIR$/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="188" column="34" selection-start-line="188" selection-start-column="34" selection-end-line="188" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/v6.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="23" column="47" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="47" />
+          <folding>
+            <element signature="e#2629#4263#0" />
+            <element signature="e#6242#6440#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mulit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="203" column="35" lean-forward="true" selection-start-line="203" selection-start-column="35" selection-end-line="203" selection-end-column="35" />
+        <state relative-caret-position="330">
+          <caret line="298" column="56" lean-forward="true" selection-start-line="298" selection-start-column="56" selection-end-line="298" selection-end-column="56" />
+          <folding>
+            <element signature="e#4316#6234#0" />
+            <element signature="e#6413#7986#0" />
+          </folding>
         </state>
       </provider>
     </entry>
