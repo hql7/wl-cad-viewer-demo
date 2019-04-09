@@ -6,9 +6,38 @@
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
           type="text/css">
     <link rel="stylesheet" href="./static/clear.css">
+    <style>
+        .msg-box{
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9;
+            width: 200px;
+            height: 240px;
+            background: rgba(250,200,209,.6);
+        }
+
+        .msg-title{
+            line-height: 36px;
+            padding: 0 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .msg-main{
+            padding: 10px 15px;
+            font-size: 16px;
+            line-height: 28px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 <div id="myViewer"></div>
+<div class="msg-box">
+    <h3 class="msg-title">构件信息：</h3>
+    <div class="msg-main">测试信息</div>
+</div>
 <script src="static/jquery.min.js"></script>
 <script src="https://developer.api.autodesk.com/derivativeservice/v2/viewers/three.min.js?v=v2.17"></script>
 <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
@@ -19,8 +48,9 @@
         this.urn_model2 = "./bim/2/0.svf";
         this.urn_model3 = "./bim/3/0.svf";
         this.urn_model4 = "./bim/4/0.svf";
-        this.urn_model5 = "./bim/0/0.svf";
-        this.urn_model6 = "./bim/6/0.svf";
+        this.urn_model5 = "./bim/5/xiaojiaoche.3DS.svf";
+        this.urn_model6 = "./cailiao/travel/0.svf";
+        this.urn_model7 = "./bim/6/Sphere.svf";
 
         //model info array
         this.modelArray = [
@@ -46,7 +76,12 @@
             },
             {
                 modelName: 'urn_model5',
-                path: urn_model5,
+                path: urn_model7,
+                modelObj: null
+            },
+            {
+                modelName: 'urn_model6',
+                path: urn_model7,
                 modelObj: null
             }
         ];
@@ -74,6 +109,7 @@
                 });
                 //load model one by one in sequence
                 globalPromise(modelArray);
+                // 多模型选择构建
                 viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
                     /*_viewer.navigation.setWorldUpVector(new THREE.Vector3(0, 0, 1));
 
@@ -83,17 +119,22 @@
 
                     _viewer.fitToView(true);*/
                     if (event.selections.length === 0) {
-                        viewer.clearThemingColors();
+                        // viewer.clearThemingColors();
                         return;
                     }
 
                     var color = new THREE.Vector4(0, 0.5, 0, 1);
                     var id = event.selections[0].dbIdArray[0];
                     viewer.setThemingColor(id, color);
-                    // Inquiry();
-                    console.log(event); // 当前选中信息集
-                    console.log(viewer.getAggregateSelection()) // 当前选中id
 
+                    var select_info = viewer.getAggregateSelection();
+                    var html = '<p>当前构建dbid：'+select_info[0].selection[0]+'</p>';
+                    html+=  '<p>当前模型id：'+select_info[0].model.id+'</p>';
+                    html+=  '<p>模型地址：'+select_info[0].model.getData().urn+'</p>';
+                    $(".msg-main").html(html);
+
+                    console.log(event); // 当前选中信息集
+                    console.log(select_info); // 当前选中id
                     /* var hitTest = viewer.clientToWorld(event.offsetX,event.offsetY, false);
                      console.log(hitTest)
                       const markupInfo = {
@@ -110,6 +151,9 @@
                            this.markup.update(t);
                        };
                        loop(0.0);*/
+                });
+                // 监视镜头移动
+                viewer.addEventListener(Autodesk.Viewing.CAMERA_TRANSITION_COMPLETED, function(){
                 });
 
             });
@@ -231,7 +275,7 @@
                     var modelName = modelArray[index].modelName;
                     var _index = index;
 
-                    _this.globalDocumentLoad(modelArray[index].path,
+                    _this.globalDocumentLoad(modelArray[index],
                         _onLoadModelSuccess,
                         _onLoadModelError);
 
@@ -270,17 +314,48 @@
                     }
 
                     function _onGeometryLoaded(evt) {
-                        if (!["urn_model2", "urn_model5"].includes(modelArray[index].modelName)){
-                            _this.viewer.fitToView(evt.model.id)
+                        if (!["urn_model2", "urn_model3", "urn_model5", "urn_model6"].includes(modelArray[index].modelName)) {
+                            // _this.viewer.fitToView(evt.model.id)
                             var red = new THREE.Vector4(0, 0.5, 0, 0.5);
                             var it = evt.model.getData().instanceTree;
                             // viewer.setThemingColor(it.nodeAccess.rootId, red);
-                            console.log(it.nodeAccess.rootId)
-                            console.log(it)
+                            // console.log(it.nodeAccess.rootId)
+                            // console.log(it)
                             for (var i in it.nodeAccess.dbIdToIndex) {
                                 _this.viewer.setThemingColor(i, red, evt.model);
                             }
                         }
+                        if (modelArray[index].modelName === "urn_model5") {
+                            // console.log(evt.model.getData())
+                            // 聚焦相机
+                            _this.viewer.fitToView([1], evt.model);
+                            var red = new THREE.Vector4(0.5, 0, 0, 0.5);
+                            var it = evt.model.getData().instanceTree;
+                            // viewer.setThemingColor(it.nodeAccess.rootId, red);
+                            // console.log(it.nodeAccess.rootId)
+                            // console.log(it)
+                            if (it) {
+                                for (var i in it.nodeAccess.dbIdToIndex) {
+                                    _this.viewer.setThemingColor(i, red, evt.model);
+                                }
+                            }
+                        }
+                        if (modelArray[index].modelName === "urn_model6") {
+                            // console.log(evt.model.getData())
+
+                            // console.log(_this.viewer.fitToView)
+                            var red = new THREE.Vector4(0, 0, 0.5, 0.5);
+                            var it = evt.model.getData().instanceTree;
+                            // viewer.setThemingColor(it.nodeAccess.rootId, red);
+                            // console.log(it)
+                            if (it) {
+                                for (var i in it.nodeAccess.dbIdToIndex) {
+                                    _this.viewer.setThemingColor(i, red, evt.model);
+                                }
+                            }
+
+                        }
+
                         _this.viewer.removeEventListener(
                             Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
                             _onGeometryLoaded);
@@ -290,8 +365,8 @@
             } //end of each promise function
 
             //build the index array
-            var indexArr = [0, 1, 2, 3];
-
+            // this.modelArray.length
+            var indexArr = Array.apply(null, Array(this.modelArray.length)).map((item, index) => index);
             //proces each promise
             //refer to http://jsfiddle.net/jfriend00/h3zaw8u8/
             function processArray(array, fn) {
@@ -311,9 +386,8 @@
                 //全部加载完成
                 console.log(result);
                 result.forEach(item => { // 透明目标模型
-                    if (["urn_model4"].includes(item.modelName)) viewer.hide(item.modelObj.id, item.modelObj);
-                })
-
+                    if (["urn_model2", "urn_model3"].includes(item.modelName)) viewer.hide(item.modelObj.id, item.modelObj);
+                });
                 // var old_globalOffset = result[0].modelObj.getData().globalOffset;
                 /*result[0].modelObj.setData({
                     globalOffset:{
@@ -364,16 +438,24 @@
         //when document is being loaded
         globalDocumentLoad = (doc, _onLoadModelSuccess, _onLoadModelError) => {
             //if this is the first model
-            if (doc === this.urn_model1) {
+            if (doc.modelName === "urn_model1") {
                 //load the first model
-                this.viewer.start(doc,
+                this.viewer.start(doc.path,
                     loadOptions,
                     _onLoadModelSuccess,
                     _onLoadModelError);
 
             } else {
                 //other models
-                this.viewer.loadModel(doc,
+                if (doc.modelName === "urn_model5") {
+                    // loadOptions.globalOffset = {x: 100, y: 0, z:100};
+                } else if (doc.modelName === "urn_model6") {
+                    loadOptions.globalOffset = {x: 2.55555555444, y: 0.111111111111, z: 2.11111111111111};
+                } else {
+                    delete loadOptions.globalOffset
+                }
+
+                this.viewer.loadModel(doc.path,
                     loadOptions,
                     _onLoadModelSuccess,
                     _onLoadModelError);
