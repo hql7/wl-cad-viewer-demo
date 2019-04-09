@@ -15,6 +15,7 @@
             width: 200px;
             height: 240px;
             background: rgba(250,200,209,.6);
+            border-radius: 3px;
         }
 
         .msg-title{
@@ -155,7 +156,10 @@
                 // 监视镜头移动
                 viewer.addEventListener(Autodesk.Viewing.CAMERA_TRANSITION_COMPLETED, function(){
                 });
-
+                // 动画初始化触发
+                viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, function(e){
+                    console.log(e)
+                });
             });
 
             // 旋转扩展
@@ -327,7 +331,10 @@
                         }
                         if (modelArray[index].modelName === "urn_model5") {
                             // console.log(evt.model.getData())
-                            // 聚焦相机
+                            // 调整焦距
+                            var focal = _this.viewer.getFocalLength();
+                            _this.viewer.setFocalLength(focal-20);
+                            // 聚焦指定模型
                             _this.viewer.fitToView([1], evt.model);
                             var red = new THREE.Vector4(0.5, 0, 0, 0.5);
                             var it = evt.model.getData().instanceTree;

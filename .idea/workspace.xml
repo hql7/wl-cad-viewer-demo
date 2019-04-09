@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="345dd6a6-f601-4c23-87f4-f2dd2b3184db" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/0.pf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/0.pf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/0.svf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/0.svf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/1.pf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/CameraDefinitions.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/CameraDefinitions.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/CameraList.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/CameraList.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/FragmentList.pack" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/FragmentList.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/GeometryMetadata.pf" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/GeometryMetadata.pf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/InstanceTree.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/InstanceTree.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/LightDefinitions.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/LightDefinitions.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/LightList.bin" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/LightList.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/objects_attrs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/objects_attrs.json.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/objects_avs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/objects_avs.json.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/objects_ids.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/objects_ids.json.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/objects_offs.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/objects_offs.json.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bim/5/objects_vals.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/bim/5/objects_vals.json.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mulit.html" beforeDir="false" afterPath="$PROJECT_DIR$/mulit.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -37,9 +20,10 @@
       <file leaf-file-name="mulit.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mulit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="280" lean-forward="true" selection-start-line="280" selection-end-line="280" />
+            <state relative-caret-position="559">
+              <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
               <folding>
+                <element signature="e#2648#4282#0" />
                 <element signature="e#4335#6254#0" />
                 <element signature="e#6435#8007#0" />
               </folding>
@@ -50,8 +34,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="11" column="39" lean-forward="true" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+            <state relative-caret-position="510">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
             </state>
           </provider>
         </entry>
@@ -151,7 +135,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../viewer-nodejs-typeview.sample" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../learn-ammojs" />
     <property name="node.js.detected.package.prettier" value="true" />
     <property name="node.js.path.for.package.prettier" value="project" />
     <property name="node.js.selected.package.prettier" value="" />
@@ -192,16 +176,15 @@
       <workItem from="1554275201893" duration="6047000" />
       <workItem from="1554339444079" duration="18831000" />
       <workItem from="1554684304695" duration="20628000" />
-      <workItem from="1554770794309" duration="8631000" />
+      <workItem from="1554770794309" duration="16416000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54137000" />
+    <option name="totallyTimeSpent" value="61922000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="1" width="1936" height="1079" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -234,6 +217,7 @@
         <state relative-caret-position="8940">
           <caret line="298" column="56" lean-forward="true" selection-start-line="298" selection-start-column="56" selection-end-line="298" selection-end-column="56" />
           <folding>
+            <element signature="e#2648#4282#0" />
             <element signature="e#4335#6254#0" />
             <element signature="e#6435#8007#0" />
           </folding>
@@ -259,6 +243,7 @@
         <state relative-caret-position="7230">
           <caret line="241" column="79" lean-forward="true" selection-start-line="241" selection-start-column="79" selection-end-line="241" selection-end-column="79" />
           <folding>
+            <element signature="e#2648#4282#0" />
             <element signature="e#4335#6254#0" />
             <element signature="e#6435#8007#0" />
           </folding>
@@ -270,6 +255,7 @@
         <state relative-caret-position="8070">
           <caret line="269" column="42" lean-forward="true" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
           <folding>
+            <element signature="e#2648#4282#0" />
             <element signature="e#4335#6254#0" />
             <element signature="e#6435#8007#0" />
           </folding>
@@ -306,16 +292,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="11" column="39" lean-forward="true" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+        <state relative-caret-position="510">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mulit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="280" lean-forward="true" selection-start-line="280" selection-end-line="280" />
+        <state relative-caret-position="559">
+          <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
           <folding>
+            <element signature="e#2648#4282#0" />
             <element signature="e#4335#6254#0" />
             <element signature="e#6435#8007#0" />
           </folding>
