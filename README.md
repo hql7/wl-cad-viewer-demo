@@ -1,5 +1,6 @@
 # autodesk-viewer-mulit
 ## 在浏览器预览转化后的bim模型，并进行一些测试性研究
+* index.html为单个功能试验
 * demo.html为简单例子演示
 * mulit.html为有序加载多模型示例(使用es6) - 持续开发中
 * v6.html为无序加载多模型示例 - 持续开发中

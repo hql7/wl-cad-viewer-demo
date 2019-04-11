@@ -1,98 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no"/>
     <meta charset="utf-8">
 
     <!-- The Viewer CSS -->
-    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css" type="text/css">
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
 
     <!-- Developer CSS -->
     <style>
         body {
             margin: 0;
         }
+
         #MyViewerDiv {
             width: 100%;
             height: 100%;
             margin: 0;
             background-color: #F0F8FF;
         }
+
+        .add-btn{
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 9;
+        }
+
+        .demo-href{
+            bottom: 40px;
+        }
+
+        .demo-remove{
+            bottom: 70px;
+        }
+
+        .tag-name{
+            pointer-events: none;
+            width: 80px;
+            height: 36px;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 36px;
+            position: absolute;
+            overflow: visible;
+            color: #FF3333;
+            background: rgba(249,205,205,.4);
+            text-align: center;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
 <!-- The Viewer will be instantiated here -->
+<button class="add-btn" id="add-btn">动态添加模型</button>
+<button class="add-btn  demo-href">
+    <a href="mulit.html">demo地址</a>
+</button>
+<button class="add-btn  demo-remove" id="demo-remove">动态调用移动</button>
+
+
 <div id="MyViewerDiv"></div>
 
 <!-- The Viewer JS -->
 <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
-
+<script src="./static/ammo.js"></script>
+<script src="./static/stats.js"></script>
+<script src="./static/jquery.min.js"></script>
+<script src="./static/snap.svg-min.js"></script>
 <!-- Developer JS -->
 <script>
-    var viewerApp;
+    // location.href = "mulit.html";
+    // return;
+    var renderer = new THREE.WebGLRenderer();
+
+    var viewer = null;
+    var path = "./bim/6/Sphere.svf";
     var options = {
-        env: 'AutodeskProduction',
-        getAccessToken: function(onGetAccessToken) {
-            //
-            // TODO: Replace static access token string below with call to fetch new token from your backend
-            // Both values are provided by Forge's Authentication (OAuth) API.
-            //
-            // Example Forge's Authentication (OAuth) API return value:
-            // {
-            //    "access_token": "<YOUR_APPLICATION_TOKEN>",
-            //    "token_type": "Bearer",
-            //    "expires_in": 86400
-            // }
-            //
-            var accessToken = 'eyJhbGciOiJIUzI1NiIsImtpZCI6Imp3dF9zeW1tZXRyaWNfa2V5In0.eyJjbGllbnRfaWQiOiJJSFIxbnExb2xzTXdaNjE1SlNwUkx2bWYyNHVoeFc0VCIsImV4cCI6MTU0MTIyNzA5Mywic2NvcGUiOlsiZGF0YTpyZWFkIiwiYnVja2V0OnJlYWQiLCJidWNrZXQ6Y3JlYXRlIiwiZGF0YTp3cml0ZSIsImJ1Y2tldDpkZWxldGUiLCJhY2NvdW50OnJlYWQiLCJhY2NvdW50OndyaXRlIl0sImF1ZCI6Imh0dHBzOi8vYXV0b2Rlc2suY29tL2F1ZC9qd3RleHA2MCIsImp0aSI6IndQemt3ak12RGFhMFY3a0xSYzJkbll1WTVZY3lPclFNOGdnaGc3M0NFMGlWaDNtV1lBcHB2OTZRYTJmdHFmbFoifQ.0S12r6RHu4aXk6C6AV-GvQw-65eYEN_Qd_eybTdl-Qw';
-            var expireTimeSeconds = 60 * 30;
-            onGetAccessToken(accessToken, expireTimeSeconds);
-        }
-
+        env: 'Local',
+        offline: 'true',
+        useADP: false,
     };
-    let config3d = {
-        extensions: ['Autodesk.InViewerSearch']
-    };
+    var db = {};
+    Autodesk.Viewing.Initializer(options, function onInitialized() {
+        var viewerDiv = document.getElementById('MyViewerDiv');
+        var config = {
+            extensions: [
+                "Autodesk.Viewing.ZoomWindow"
+            ],
+            disabledExtensions: {
+                measure: false,
+                section: false,
+            }
+        };
+        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+        viewer.start(path, null, onLoadModelSuccess, onLoadModelError);
+        viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
 
-    var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6cmV2aXRpb3NhbXBsZS9yZXZpdHNhbXBsZS5ydnQ';
-    Autodesk.Viewing.Initializer(options, function onInitialized(){
-        viewerApp = new Autodesk.Viewing.ViewingApplication('MyViewerDiv');
-        viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, config3d);
-        viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+            if (event.selections.length === 0) {
+                // viewer.clearThemingColors();
+                return;
+            }
+
+            var color = new THREE.Vector4(0, 0.5, 0, 1);
+            var id = event.selections[0].dbIdArray[0];
+            viewer.setThemingColor(id, color);
+            console.log(event); // 当前选中信息集
+        });
+        init();
     });
 
-    function onDocumentLoadSuccess(doc) {
+    function onLoadModelSuccess(model) {
+        console.log('onLoadModelSuccess()!');
+        console.log('Validate model loaded: ' + (viewer.model === model));
+        console.log(model.getData());
+        viewer.fitToView([2], model);
 
-        // We could still make use of Document.getSubItemsWithProperties()
-        // However, when using a ViewingApplication, we have access to the **bubble** attribute,
-        // which references the root node of a graph that wraps each object from the Manifest JSON.
-        var viewables = viewerApp.bubble.search({'type':'geometry'});
-        if (viewables.length === 0) {
-            console.error('Document contains no viewables.');
-            return;
+        viewer.addEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            _onGeometryLoaded);
+    }
+
+    // 动态添加模型
+    $("#add-btn").click(function () {
+        viewer.loadModel(path, {globalOffset: {x: 2.5, y: 0.6, z: 6}}, onLoadModelSuccess, onLoadModelError);
+    });
+
+    // 操作模型移动
+    $("#demo-remove").click(function () {
+        var model = db[1].model;
+        var fragIdsArray = [0];
+        var i = 1;
+        var timer = setInterval(function () {
+            fragIdsArray.forEach((fragId, idx) => {
+                var fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+
+                fragProxy.getAnimTransform();
+
+                fragProxy.position.x += 0.005;
+                fragProxy.position.z += 0.005;
+
+                fragProxy.updateAnimTransform();
+            });
+            viewer.impl.sceneUpdated(true);
+
+            i++;
+            if(i>= 50) clearInterval(timer)
+        },30);
+    })
+
+    /**
+     * viewer.loadModel() failure callback.
+     * Invoked when there's an error fetching the SVF file.
+     */
+    function onLoadModelError(viewerErrorCode) {
+        console.error('onLoadModelError() - errorCode:' + viewerErrorCode);
+    }
+
+    function _onGeometryLoaded(evt) {
+        // var offset = new THREE.Vector3(-1, 0, 0);
+        db[evt.model.id] = evt;
+        onMouseClick({clientX: 800, clientY:467});
+        /*
+        var model = evt.model;
+        var fragIdsArray = [0];
+         var i = 1;
+         var timer = setInterval(function () {
+             fragIdsArray.forEach((fragId, idx) => {
+                 var fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+
+                 fragProxy.getAnimTransform();
+
+                 fragProxy.position.x += 0.005;
+                 fragProxy.position.z += 0.005;
+
+                 fragProxy.updateAnimTransform();
+             });
+             viewer.impl.sceneUpdated(true);
+
+             i++;
+             if(i>= 50) clearInterval(timer)
+         },30);*/
+
+
+        viewer.removeEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            _onGeometryLoaded);
+    }
+    function init(){
+        //delegate the mouse click event
+        $(viewer.container).bind("click", onMouseClick);
+        //delegate the event of CAMERA_CHANGE_EVENT
+        viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, function(rt){
+            //find out all pushpin markups
+            var $eles = $("div[id^='mymk']");
+            var DOMeles = $eles.get();
+
+            for(var index in DOMeles){
+                //get each DOM element
+                var DOMEle = DOMeles[index];
+                var divEle = $('#' + DOMEle.id);
+                //get out the 3D coordination
+                var val = divEle.data('3DData');
+                var pushpinModelPt = JSON.parse(val);
+                //get the updated screen point
+                var screenpoint = viewer.worldToClient(new THREE.Vector3(
+                    pushpinModelPt.x,
+                    pushpinModelPt.y,
+                    pushpinModelPt.z,));
+                //update the SVG position.
+                divEle.css({
+                    'left': screenpoint.x - pushpinModelPt.radius*2,
+                    'top': screenpoint.y - pushpinModelPt.radius
+                });
+            }
+        });
+    }
+
+    function onMouseClick (event) {
+        var screenPoint = {
+            x: event.clientX,
+            y: event.clientY
+        };
+
+        //get the selected 3D position of the object
+        var hitTest = viewer.impl.hitTest(screenPoint.x,screenPoint.y,true);
+        if(hitTest)
+        {
+            drawPushpin({x:hitTest.intersectPoint.x,
+                y:hitTest.intersectPoint.y,
+                z:hitTest.intersectPoint.z});
+        }
+    }
+
+    //generate a random id for each pushpin markup
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    function drawPushpin(pushpinModelPt){
+
+        //convert 3D position to 2D screen coordination
+        var screenpoint = viewer.worldToClient(
+            new THREE.Vector3(pushpinModelPt.x,
+                pushpinModelPt.y,
+                pushpinModelPt.z,));
+        //build the div container
+        var randomId = makeid();
+        var htmlMarker = '<div id="mymk' + randomId + '" class="tag-name">张三</div>';
+        var parent = viewer.container
+        $(parent).append(htmlMarker);
+       /* $('#mymk'+randomId ).css({
+            'pointer-events': 'none',
+            'width': '80px',
+            'height': '36px',
+            'font-size': '16px',
+            'font-weight': '700',
+            'line-height': '36px',
+            'position': 'absolute',
+            'overflow': 'visible',
+            'color':'#FF8888'
+        });*/
+
+        //build the svg element and draw a circle
+      /*  $('#mymk'+randomId).append('<svg id="mysvg'+randomId+ '"></svg>')
+        var snap = Snap($('#mysvg'+randomId)[0]);
+        var rad = 12;
+        var circle = snap.paper.circle(14, 14, rad);
+        circle.attr({
+            fill: "#FF8888",
+            fillOpacity: 0.6,
+            stroke: "#FF0000",
+            strokeWidth: 3
+        });*/
+
+        //set the position of the SVG
+        //adjust to make the circle center is the position of the click point
+        var $container = $('#mymk'+randomId);
+        $container.css({
+            // 'left': screenpoint.x - rad*2,
+            'left': screenpoint.x,
+            // 'top': screenpoint.y - rad
+            'top': screenpoint.y
+
+        });
+
+        //store 3D point data to the DOM
+        var div = $('#mymk'+randomId);
+        //add radius info with the 3D data
+        // pushpinModelPt.radius = rad;
+        var storeData = JSON.stringify(pushpinModelPt);
+        div.data('3DData', storeData);
+    }
+
+    // 根据model获取FragIds
+    function getLeafFragIds(model, leafId) {
+        var instanceTree = model.getData().instanceTree;
+        var fragIds = [];
+        instanceTree.enumNodeFragments(leafId, function (fragId) {
+            fragIds.push(fragId);
+        });
+
+        return fragIds;
+    }
+
+    function getModifiedWorldBoundingBox(fragIds, fragList) {
+        var fragbBox = new THREE.Box3();
+        var nodebBox = new THREE.Box3();
+        fragIds.forEach(function (fragId) {
+            fragList.getWorldBounds(fragId, fragbBox);
+            nodebBox.union(fragbBox);
+        });
+        return nodebBox;
+    }
+
+    function getComponentBoundingBox(model, dbId) {
+        var fragIds = getLeafFragIds(model, dbId);
+        var fragList = model.getFragmentList();
+        return getModifiedWorldBoundingBox(fragIds, fragList);
+    }
+
+    function getMeshGeometry(data, vertexArray) {
+        var offsets = [{
+            count: data.indices.length,
+            index: 0,
+            start: 0
+        }];
+        for (let oi = 0, ol = offsets.length; oi < ol; ++oi) {
+
+            let start = offsets[oi].start;
+            let count = offsets[oi].count;
+            let index = offsets[oi].index;
+
+            for (let i = start, il = start + count; i < il; i += 3) {
+
+                var a = index + data.indices[i];
+                var b = index + data.indices[i + 1];
+                var c = index + data.indices[i + 2];
+
+                var vA = new THREE.Vector3();
+                var vB = new THREE.Vector3();
+                var vC = new THREE.Vector3();
+
+                vA.fromArray(data.positions, a * data.stride);
+                vB.fromArray(data.positions, b * data.stride);
+                vC.fromArray(data.positions, c * data.stride);
+
+                vertexArray.push(vA);
+                vertexArray.push(vB);
+                vertexArray.push(vC);
+            }
+        }
+    }
+
+    // Build THREE.Mesh
+    function buildComponentMesh(viewer, dbId) {
+
+        var geometry = getComponentGeometry(viewer, dbId);
+
+        var boundingBox = getComponentBoundingBox(viewer.model, dbId);
+        var matrixWorld = geometry.matrixWorld;
+        var nbMeshes = geometry.meshes.length;
+
+        var vertexArray = [];
+
+        for (let idx = 0; idx < nbMeshes; ++idx) {
+            var mesh = geometry.meshes[idx];
+
+            var meshData = {
+                positions: mesh.positions,
+                indices: mesh.indices,
+                stride: mesh.stride
+            };
+
+            getMeshGeometry(meshData, vertexArray);
         }
 
-        // Choose any of the avialble viewables
-        viewerApp.selectItem(viewables[0].data, onItemLoadSuccess, onItemLoadFail);
+        var geometry = new THREE.Geometry();
+
+        for (let i = 0; i < vertexArray.length; i += 3) {
+
+            geometry.vertices.push(vertexArray[i]);
+            geometry.vertices.push(vertexArray[i + 1]);
+            geometry.vertices.push(vertexArray[i + 2]);
+
+            var face = new THREE.Face3(i, i + 1, i + 2);
+
+            geometry.faces.push(face);
+        }
+
+        var matrixWorld = new THREE.Matrix4();
+
+        matrixWorld.fromArray(matrixWorld);
+
+        var mesh = new THREE.Mesh(geometry);
+
+        mesh.applyMatrix(matrixWorld);
+
+        mesh.boundingBox = boundingBox;
+
+        mesh.dbId = dbId;
+
+        return mesh;
     }
 
-    function onDocumentLoadFailure(viewerErrorCode) {
-        console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
+    // get geometry for all fragments in a component
+    function getComponentGeometry(viewer, dbId) {
+        var fragIds = getLeafFragIds(viewer.model, dbId);
+
+        let matrixWorld = null;
+
+        var meshes = fragIds.map(function (fragId) {
+
+            var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId);
+
+            var geometry = renderProxy.geometry;
+            var attributes = geometry.attributes;
+            var positions = geometry.vb ? geometry.vb : attributes.position.array;
+
+            var indices = attributes.index.array || geometry.ib;
+            var stride = geometry.vb ? geometry.vbstride : 3;
+            var offsets = geometry.offsets;
+
+            matrixWorld = matrixWorld || renderProxy.matrixWorld.elements;
+
+            return {
+                positions,
+                indices,
+                offsets,
+                stride
+            };
+        });
+
+        return {
+            matrixWorld,
+            meshes
+        };
     }
-
-    function onItemLoadSuccess(viewer, item) {
-        console.log('onItemLoadSuccess()!');
-        console.log(viewer);
-        console.log(item);
-
-        // Congratulations! The viewer is now ready to be used.
-        console.log('Viewers are equal: ' + (viewer === viewerApp.getCurrentViewer()));
-    }
-
-    function onItemLoadFail(errorCode) {
-        console.error('onItemLoadFail() - errorCode:' + errorCode);
-    }
-
 </script>
 </body>
 </html>

@@ -7,25 +7,26 @@
           type="text/css">
     <link rel="stylesheet" href="./static/clear.css">
     <style>
-        .msg-box{
+        .msg-box {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            right: 10px;
+            bottom: 10px;
             z-index: 9;
             width: 200px;
             height: 240px;
-            background: rgba(250,200,209,.6);
+            background: rgba(250, 200, 209, .6);
             border-radius: 3px;
         }
 
-        .msg-title{
+        .msg-title {
             line-height: 36px;
             padding: 0 15px;
             font-size: 16px;
             font-weight: bold;
             color: #333;
         }
-        .msg-main{
+
+        .msg-main {
             padding: 10px 15px;
             font-size: 16px;
             line-height: 28px;
@@ -58,7 +59,7 @@
             {
                 modelName: 'urn_model1',
                 path: urn_model1,
-                modelObj: null
+                modelObj: null,
             },
             {
                 modelName: 'urn_model2',
@@ -85,6 +86,34 @@
                 path: urn_model7,
                 modelObj: null
             }
+        ];
+
+        this.loadMore = [
+            {
+                modelName: 'load_model1',
+                path: urn_model7,
+                modelObj: null,
+            },
+            {
+                modelName: 'load_model2',
+                path: urn_model7,
+                modelObj: null,
+            },
+            {
+                modelName: 'load_model3',
+                path: urn_model7,
+                modelObj: null,
+            },
+            {
+                modelName: 'load_model4',
+                path: urn_model7,
+                modelObj: null,
+            },
+            {
+                modelName: 'load_model5',
+                path: urn_model7,
+                modelObj: null,
+            },
         ];
 
         //viewer object
@@ -129,16 +158,16 @@
                     viewer.setThemingColor(id, color);
 
                     var select_info = viewer.getAggregateSelection();
-                    var html = '<p>当前构建dbid：'+select_info[0].selection[0]+'</p>';
-                    html+=  '<p>当前模型id：'+select_info[0].model.id+'</p>';
-                    html+=  '<p>模型地址：'+select_info[0].model.getData().urn+'</p>';
+                    var html = '<p>当前构件dbid：' + select_info[0].selection[0] + '</p>';
+                    html += '<p>当前模型id：' + select_info[0].model.id + '</p>';
+                    html += '<p>模型地址：' + select_info[0].model.getData().urn + '</p>';
                     $(".msg-main").html(html);
 
                     console.log(event); // 当前选中信息集
                     console.log(select_info); // 当前选中id
                     /* var hitTest = viewer.clientToWorld(event.offsetX,event.offsetY, false);
                      console.log(hitTest)
-                      const markupInfo = {
+                      var markupInfo = {
                           fragId: hitTest.fragId,
                           point: hitTest.point,
                           dbId: hitTest.dbId,
@@ -147,24 +176,49 @@
                       var markup = new pointcloudmarkup(viewer, options);
                       markup.addMarkup(markupInfo);
                       markup.startAnimation();
-                       const loop = (t) => {
+                       var loop = (t) => {
                            window.requestAnimationFrame(loop);
                            this.markup.update(t);
                        };
                        loop(0.0);*/
+
+                    // 设置移动量 - 向 X 轴移动 -100 单位
+                    /*var offset = new THREE.Vector3( -100, 0 , 0 );
+
+                    var model = event.model;
+                    var fragIdsArray = event.selections[0].fragIdsArray;
+
+                    fragIdsArray.forEach( ( fragId, idx ) => {
+                        var fragProxy = viewer.impl.getFragmentProxy( model, fragId );
+
+                        fragProxy.getAnimTransform();
+
+                        var position = new THREE.Vector3(
+                            fragProxy.position.x + offset.x,
+                            fragProxy.position.y + offset.y,
+                            fragProxy.position.z + offset.z
+                        );
+
+                        fragProxy.position = position;
+
+                        fragProxy.updateAnimTransform();
+                    });
+
+                    viewer.impl.sceneUpdated( true );*/
+
                 });
                 // 监视镜头移动
-                viewer.addEventListener(Autodesk.Viewing.CAMERA_TRANSITION_COMPLETED, function(){
+                viewer.addEventListener(Autodesk.Viewing.CAMERA_TRANSITION_COMPLETED, function () {
                 });
                 // 动画初始化触发
-                viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, function(e){
+                viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, function (e) {
                     console.log(e)
                 });
             });
 
-            // 旋转扩展
+            /*// 旋转扩展
             class RotateExt extends Autodesk.Viewing.Extension {
-                constructor(viewer, options) {
+                varructor(viewer, options) {
                     super();
                 }
 
@@ -178,31 +232,31 @@
                     return true;
                 }
 
-                /**!
+                /!**!
                  * 关键函数
-                 */
+                 *!/
                 onSelectionChanged(event) {
                     console.log(event, 1)
-                    const quaternion = new THREE.Quaternion();
+                    var quaternion = new THREE.Quaternion();
                     // 设置旋转量 - 依 Y 轴旋转构件 180 度
                     quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
 
-                    const model = event.model;
-                    const fragIdsArray = event.fragIdsArray;
+                    var model = event.model;
+                    var fragIdsArray = event.fragIdsArray;
 
                     fragIdsArray.forEach((fragId, idx) => {
-                        const fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
+                        var fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
 
                         fragProxy.getAnimTransform();
 
-                        const position = new THREE.Vector3(fragProxy.position.x, fragProxy.position.y, fragProxy.position.z);
+                        var position = new THREE.Vector3(fragProxy.position.x, fragProxy.position.y, fragProxy.position.z);
                         position.applyQuaternion(quaternion);
 
                         fragProxy.position = position;
                         fragProxy.quaternion.multiplyQuaternions(quaternion, fragProxy.quaternion);
 
                         if (idx === 0) {
-                            const euler = new THREE.Euler();
+                            var euler = new THREE.Euler();
                             euler.setFromQuaternion(fragProxy.quaternion, 0);
                         }
 
@@ -218,7 +272,7 @@
 
             // 移动扩展
             class TranslateExt extends Autodesk.Viewing.Extension {
-                constructor(viewer, options) {
+                varructor(viewer, options) {
                     super();
                 }
 
@@ -232,23 +286,23 @@
                     return true;
                 }
 
-                /**!
+                /!**!
                  * 关键函数
-                 */
+                 *!/
                 onSelectionChanged(event) {
 
                     // 设置移动量 - 向 X 轴移动 -100 单位
-                    const offset = new THREE.Vector3(-100, 0, 0);
+                    var offset = new THREE.Vector3(-100, 0, 0);
 
-                    const model = event.model;
-                    const fragIdsArray = event.fragIdsArray;
+                    var model = event.model;
+                    var fragIdsArray = event.fragIdsArray;
 
                     fragIdsArray.forEach((fragId, idx) => {
-                        const fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
+                        var fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
 
                         fragProxy.getAnimTransform();
 
-                        const position = new THREE.Vector3(
+                        var position = new THREE.Vector3(
                             fragProxy.position.x + offset.x,
                             fragProxy.position.y + offset.y,
                             fragProxy.position.z + offset.z
@@ -264,7 +318,7 @@
             }
 
             // 注册移动扩展
-            Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.TranslateTool', TranslateExt);
+            Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.TranslateTool', TranslateExt);*/
         }
 
         //load model by promise
@@ -333,7 +387,7 @@
                             // console.log(evt.model.getData())
                             // 调整焦距
                             var focal = _this.viewer.getFocalLength();
-                            _this.viewer.setFocalLength(focal-20);
+                            _this.viewer.setFocalLength(focal - 20);
                             // 聚焦指定模型
                             _this.viewer.fitToView([1], evt.model);
                             var red = new THREE.Vector4(0.5, 0, 0, 0.5);
@@ -362,6 +416,64 @@
                             }
 
                         }
+                        if (index === 4) {
+                            var model = evt.model;
+                            var fragIdsArray = [0];
+                            var i = 1;
+                            var timer = setInterval(function () {
+                                fragIdsArray.forEach((fragId, idx) => {
+                                    var fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+
+                                    fragProxy.getAnimTransform();
+
+                                    fragProxy.position.x -= 0.001;
+                                    fragProxy.position.z -= 0.001;
+                                    fragProxy.position.y -= 0.001;
+
+                                    fragProxy.updateAnimTransform();
+                                });
+                                viewer.impl.sceneUpdated(true);
+
+                                i++;
+                                if (i >= 500) clearInterval(timer)
+                            }, 30);
+                        }
+
+
+                        if (index === 5) {
+                            // setTimeout(createTexture, 500);
+                            var model = evt.model;
+                            var fragIdsArray = [0];
+                            var i = 1;
+                            var timer = setInterval(function () {
+                                fragIdsArray.forEach((fragId, idx) => {
+                                    var fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+
+                                    fragProxy.getAnimTransform();
+
+                                    fragProxy.position.x += 0.005;
+                                    fragProxy.position.z += 0.001;
+                                    fragProxy.position.y += 0.005;
+
+                                    fragProxy.updateAnimTransform();
+                                });
+                                viewer.impl.sceneUpdated(true);
+
+                                i++;
+                                if (i >= 500) clearInterval(timer)
+                            }, 30);
+
+                        }
+                        /*var old_globalOffset = result[0].modelObj.getData().globalOffset;
+                        result[4].modelObj.setData({
+                            globalOffset:{
+                                x: old_globalOffset.x + 1000,
+                                y: old_globalOffset.y + 1000,
+                                z: old_globalOffset.z + 100,
+                            }
+                        })
+                        viewer.tearDown()
+                        viewer.setUp()*/
 
                         _this.viewer.removeEventListener(
                             Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
@@ -395,37 +507,47 @@
                 result.forEach(item => { // 透明目标模型
                     if (["urn_model2", "urn_model3"].includes(item.modelName)) viewer.hide(item.modelObj.id, item.modelObj);
                 });
-                // var old_globalOffset = result[0].modelObj.getData().globalOffset;
-                /*result[0].modelObj.setData({
-                    globalOffset:{
-                        x: old_globalOffset.x + 1000,
-                        y: old_globalOffset.y + 1000,
-                        z: old_globalOffset.z + 100,
-                    }
-                })*/
+
                 // 设置移动量 - 向 X 轴移动 -100 单位
-                /* const offset = new THREE.Vector3(-1000, 1000, 450);
-                 const model_ = result[0].modelObj;
-                 const fragIdsArray =  getLeafFragIds (
-                     model_, model_.id);
-                 console.log(fragIdsArray)
-                 // console.log(viewer.impl)
-                 fragIdsArray.forEach((fragId, idx) => {
-                     const fragProxy = viewer.impl.getFragmentProxy(model_, fragId);
+                /*   var offset = new THREE.Vector3(-1000, 1000, 450);
+                   var model_ = result[0].modelObj;
+                   var fragIdsArray =  getLeafFragIds (
+                       model_, model_.id);
+                   console.log(fragIdsArray)
+                   // console.log(viewer.impl)
+                   fragIdsArray.forEach((fragId, idx) => {
+                       var fragProxy = viewer.impl.getFragmentProxy(model_, fragId);
 
-                     fragProxy.getAnimTransform();
+                       fragProxy.getAnimTransform();
 
-                     const position = new THREE.Vector3(
-                         fragProxy.position.x + offset.x,
-                         fragProxy.position.y + offset.y,
-                         fragProxy.position.z + offset.z
-                     );
+                       var position = new THREE.Vector3(
+                           fragProxy.position.x + offset.x,
+                           fragProxy.position.y + offset.y,
+                           fragProxy.position.z + offset.z
+                       );
 
-                     fragProxy.position = position;
+                       fragProxy.position = position;
 
-                     fragProxy.updateAnimTransform();
-                 });
-                 viewer.impl.sceneUpdated(true);*/
+                       fragProxy.updateAnimTransform();
+                   });
+                   viewer.impl.sceneUpdated(true);*/
+                var offset = {x: 2.55555555444, y: 0.111111111111, z: 2.11111111111111};
+                var x_ = 0.000000001, y_ = 0.0000000001, z_ = 0.000000000001;
+                setTimeout(function () {
+                    loadMore.forEach(function (item) {
+                        viewer.loadModel(item.path,
+                            {globalOffset: {x: offset.x + x_}},
+                            function (model) {
+                                console.log(model)
+                            },
+                            function (err) {
+                                console.log(err)
+                            });
+                        x_ += x_;
+                        y_ += y_;
+                        z_ += z_;
+                    })
+                }, 2000)
             }, function (reason) {
                 console.log(reason);
             });
@@ -471,12 +593,148 @@
 
         // 根据model获取FragIds
         function getLeafFragIds(model, leafId) {
-            const instanceTree = model.getData().instanceTree;
-            const fragIds = [];
+            var instanceTree = model.getData().instanceTree;
+            var fragIds = [];
             instanceTree.enumNodeFragments(leafId, function (fragId) {
                 fragIds.push(fragId);
             });
+
             return fragIds;
+        }
+
+        function getModifiedWorldBoundingBox(fragIds, fragList) {
+            var fragbBox = new THREE.Box3();
+            var nodebBox = new THREE.Box3();
+            fragIds.forEach(function (fragId) {
+                fragList.getWorldBounds(fragId, fragbBox);
+                nodebBox.union(fragbBox);
+            });
+            return nodebBox;
+        }
+
+        function getComponentBoundingBox(model, dbId) {
+            var fragIds = getLeafFragIds(model, dbId);
+            var fragList = model.getFragmentList();
+            return getModifiedWorldBoundingBox(fragIds, fragList);
+        }
+
+        function getMeshGeometry(data, vertexArray) {
+            var offsets = [{
+                count: data.indices.length,
+                index: 0,
+                start: 0
+            }];
+            for (let oi = 0, ol = offsets.length; oi < ol; ++oi) {
+
+                let start = offsets[oi].start;
+                let count = offsets[oi].count;
+                let index = offsets[oi].index;
+
+                for (let i = start, il = start + count; i < il; i += 3) {
+
+                    var a = index + data.indices[i];
+                    var b = index + data.indices[i + 1];
+                    var c = index + data.indices[i + 2];
+
+                    var vA = new THREE.Vector3();
+                    var vB = new THREE.Vector3();
+                    var vC = new THREE.Vector3();
+
+                    vA.fromArray(data.positions, a * data.stride);
+                    vB.fromArray(data.positions, b * data.stride);
+                    vC.fromArray(data.positions, c * data.stride);
+
+                    vertexArray.push(vA);
+                    vertexArray.push(vB);
+                    vertexArray.push(vC);
+                }
+            }
+        }
+
+        // Build THREE.Mesh
+        function buildComponentMesh(viewer, dbId) {
+
+            var geometry = getComponentGeometry(viewer, dbId);
+
+            var boundingBox = getComponentBoundingBox(viewer.model, dbId);
+            var matrixWorld = geometry.matrixWorld;
+            var nbMeshes = geometry.meshes.length;
+
+            var vertexArray = [];
+
+            for (let idx = 0; idx < nbMeshes; ++idx) {
+                var mesh = geometry.meshes[idx];
+
+                var meshData = {
+                    positions: mesh.positions,
+                    indices: mesh.indices,
+                    stride: mesh.stride
+                };
+
+                getMeshGeometry(meshData, vertexArray);
+            }
+
+            var geometry = new THREE.Geometry();
+
+            for (let i = 0; i < vertexArray.length; i += 3) {
+
+                geometry.vertices.push(vertexArray[i]);
+                geometry.vertices.push(vertexArray[i + 1]);
+                geometry.vertices.push(vertexArray[i + 2]);
+
+                var face = new THREE.Face3(i, i + 1, i + 2);
+
+                geometry.faces.push(face);
+            }
+
+            var matrixWorld = new THREE.Matrix4();
+
+            matrixWorld.fromArray(matrixWorld);
+
+            var mesh = new THREE.Mesh(geometry);
+
+            mesh.applyMatrix(matrixWorld);
+
+            mesh.boundingBox = boundingBox;
+
+            mesh.dbId = dbId;
+
+            return mesh;
+        }
+
+        // get geometry for all fragments in a component
+        function getComponentGeometry(viewer, dbId) {
+
+            var fragIds = getLeafFragIds(viewer.model, dbId);
+
+            let matrixWorld = null;
+
+            var meshes = fragIds.map(function (fragId) {
+
+                var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId);
+
+                var geometry = renderProxy.geometry;
+                var attributes = geometry.attributes;
+                var positions = geometry.vb ? geometry.vb : attributes.position.array;
+
+                var indices = attributes.index.array || geometry.ib;
+                var stride = geometry.vb ? geometry.vbstride : 3;
+                var offsets = geometry.offsets;
+
+                matrixWorld = matrixWorld || renderProxy.matrixWorld.elements;
+
+                return {
+                    positions,
+                    indices,
+                    offsets,
+                    stride
+                };
+            });
+
+            return {
+                matrixWorld,
+                meshes
+            };
         }
 
         // 调用

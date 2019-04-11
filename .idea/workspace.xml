@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="345dd6a6-f601-4c23-87f4-f2dd2b3184db" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mulit.html" beforeDir="false" afterPath="$PROJECT_DIR$/mulit.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -17,25 +19,59 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="mulit.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mulit.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mulit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="559">
-              <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
+            <state relative-caret-position="459">
+              <caret line="541" selection-start-line="541" selection-end-line="541" />
               <folding>
-                <element signature="e#2648#4282#0" />
-                <element signature="e#4335#6254#0" />
-                <element signature="e#6435#8007#0" />
+                <element signature="e#1754#2575#0" />
+                <element signature="e#2602#2750#0" />
+                <element signature="e#3017#6791#0" />
+                <element signature="e#3598#6452#0" />
+                <element signature="e#4777#5528#0" />
+                <element signature="e#5597#6433#0" />
+                <element signature="e#6807#10634#0" />
+                <element signature="e#20160#21106#0" />
+                <element signature="e#22700#22956#0" />
+                <element signature="e#23022#23317#0" />
+                <element signature="e#23373#23558#0" />
+                <element signature="e#23612#24727#0" />
+                <element signature="e#24807#26162#0" />
+                <element signature="e#26273#27252#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="223" column="28" lean-forward="true" selection-start-line="223" selection-start-column="28" selection-end-line="223" selection-end-column="28" />
+              <folding>
+                <element signature="e#1801#2151#0" />
+                <element signature="e#2740#2756#0" />
+                <element signature="e#3221#3237#0" />
+                <element signature="e#2644#2727#0" />
+                <element signature="e#5214#6155#0" />
+                <element signature="e#6697#6956#0" />
+                <element signature="e#3604#3832#0" />
+                <element signature="e#3894#4157#0" />
+                <element signature="e#4209#4378#0" />
+                <element signature="e#4428#5443#0" />
+                <element signature="e#5515#6750#0" />
+                <element signature="e#6853#7739#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="60">
+              <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -43,8 +79,8 @@
       <file leaf-file-name="v6.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/v6.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
+            <state relative-caret-position="3180">
+              <caret line="106" column="12" selection-start-line="106" selection-start-column="12" selection-end-line="110" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -52,8 +88,8 @@
       <file leaf-file-name="demo.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1717">
-              <caret line="186" column="13" lean-forward="true" selection-start-line="186" selection-start-column="13" selection-end-line="186" selection-end-column="13" />
+            <state relative-caret-position="480">
+              <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="24" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -71,12 +107,27 @@
     <findStrings>
       <find>isolate</find>
       <find>onSelectionChanged</find>
-      <find>_onGeometryLoaded</find>
       <find>promiseEachModel</find>
       <find>viewer</find>
       <find>urn_model1</find>
       <find>globalDocumentLoad</find>
+      <find>geometry</find>
+      <find>getComponentGeometry</find>
+      <find>THREE.Mesh</find>
+      <find>const</find>
+      <find>material</find>
+      <find>getLeafFragIds</find>
+      <find>_onGeometryLoaded</find>
+      <find>hitTest1</find>
+      <find>CAMERA_CHANGE_EVENT</find>
+      <find>Snap</find>
+      <find>onMouseClick</find>
+      <find>makeid</find>
     </findStrings>
+    <replaceStrings>
+      <replace>var</replace>
+      <replace>viewer</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,8 +137,10 @@
       <list>
         <option value="$PROJECT_DIR$/ani.html" />
         <option value="$PROJECT_DIR$/v6.html" />
-        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/demo.html" />
         <option value="$PROJECT_DIR$/mulit.html" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -97,10 +150,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="1912" />
-    <option name="y" value="1" />
-    <option name="width" value="1936" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1945" />
+    <option name="y" value="-14" />
+    <option name="width" value="1920" />
     <option name="height" value="1079" />
   </component>
   <component name="ProjectView">
@@ -108,7 +161,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -126,10 +178,16 @@
               <item name="autodesk-viewer-mulit" type="462c0819:PsiDirectoryNode" />
               <item name="cailiao" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="autodesk-viewer-mulit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autodesk-viewer-mulit" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -177,14 +235,17 @@
       <workItem from="1554339444079" duration="18831000" />
       <workItem from="1554684304695" duration="20628000" />
       <workItem from="1554770794309" duration="16416000" />
+      <workItem from="1356981501178" duration="22981000" />
+      <workItem from="1554943138361" duration="10287000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61922000" />
+    <option name="totallyTimeSpent" value="95190000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="1" width="1936" height="1079" extended-state="0" />
+    <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -214,12 +275,132 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/mulit.html">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12750">
+          <caret line="425" lean-forward="true" selection-start-line="425" selection-end-line="425" />
+          <folding>
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+          <folding>
+            <element signature="e#1801#2151#0" />
+            <element signature="e#2740#2756#0" />
+            <element signature="e#3221#3237#0" />
+            <element signature="e#2644#2727#0" />
+            <element signature="e#5214#6155#0" />
+            <element signature="e#6697#6956#0" />
+            <element signature="e#3604#3832#0" />
+            <element signature="e#3894#4157#0" />
+            <element signature="e#4209#4378#0" />
+            <element signature="e#4428#5443#0" />
+            <element signature="e#5515#6750#0" />
+            <element signature="e#6853#7739#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/v6.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3180">
+          <caret line="106" column="12" selection-start-line="106" selection-start-column="12" selection-end-line="110" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="24" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mulit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6510">
+          <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
+          <folding>
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/v6.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5580">
+          <caret line="186" column="13" lean-forward="true" selection-start-line="186" selection-start-column="13" selection-end-line="186" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mulit.html">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8940">
           <caret line="298" column="56" lean-forward="true" selection-start-line="298" selection-start-column="56" selection-end-line="298" selection-end-column="56" />
           <folding>
-            <element signature="e#2648#4282#0" />
-            <element signature="e#4335#6254#0" />
-            <element signature="e#6435#8007#0" />
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
           </folding>
         </state>
       </provider>
@@ -243,9 +424,20 @@
         <state relative-caret-position="7230">
           <caret line="241" column="79" lean-forward="true" selection-start-line="241" selection-start-column="79" selection-end-line="241" selection-end-column="79" />
           <folding>
-            <element signature="e#2648#4282#0" />
-            <element signature="e#4335#6254#0" />
-            <element signature="e#6435#8007#0" />
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
           </folding>
         </state>
       </provider>
@@ -255,9 +447,20 @@
         <state relative-caret-position="8070">
           <caret line="269" column="42" lean-forward="true" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
           <folding>
-            <element signature="e#2648#4282#0" />
-            <element signature="e#4335#6254#0" />
-            <element signature="e#6435#8007#0" />
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
           </folding>
         </state>
       </provider>
@@ -270,42 +473,69 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bim/5/index.html" />
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2241" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ani.html" />
-    <entry file="file://$PROJECT_DIR$/demo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1717">
-          <caret line="186" column="13" lean-forward="true" selection-start-line="186" selection-start-column="13" selection-end-line="186" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/v6.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
+        <state relative-caret-position="3180">
+          <caret line="106" column="12" selection-start-line="106" selection-start-column="12" selection-end-line="110" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/demo.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        <state relative-caret-position="480">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="24" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mulit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
+        <state relative-caret-position="459">
+          <caret line="541" selection-start-line="541" selection-end-line="541" />
           <folding>
-            <element signature="e#2648#4282#0" />
-            <element signature="e#4335#6254#0" />
-            <element signature="e#6435#8007#0" />
+            <element signature="e#1754#2575#0" />
+            <element signature="e#2602#2750#0" />
+            <element signature="e#3017#6791#0" />
+            <element signature="e#3598#6452#0" />
+            <element signature="e#4777#5528#0" />
+            <element signature="e#5597#6433#0" />
+            <element signature="e#6807#10634#0" />
+            <element signature="e#20160#21106#0" />
+            <element signature="e#22700#22956#0" />
+            <element signature="e#23022#23317#0" />
+            <element signature="e#23373#23558#0" />
+            <element signature="e#23612#24727#0" />
+            <element signature="e#24807#26162#0" />
+            <element signature="e#26273#27252#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="223" column="28" lean-forward="true" selection-start-line="223" selection-start-column="28" selection-end-line="223" selection-end-column="28" />
+          <folding>
+            <element signature="e#1801#2151#0" />
+            <element signature="e#2740#2756#0" />
+            <element signature="e#3221#3237#0" />
+            <element signature="e#2644#2727#0" />
+            <element signature="e#5214#6155#0" />
+            <element signature="e#6697#6956#0" />
+            <element signature="e#3604#3832#0" />
+            <element signature="e#3894#4157#0" />
+            <element signature="e#4209#4378#0" />
+            <element signature="e#4428#5443#0" />
+            <element signature="e#5515#6750#0" />
+            <element signature="e#6853#7739#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
         </state>
       </provider>
     </entry>
