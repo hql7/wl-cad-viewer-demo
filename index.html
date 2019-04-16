@@ -50,6 +50,17 @@
             text-align: center;
             border-radius: 3px;
         }
+
+        #label {
+            display:none;
+            position:fixed;
+            z-index:2;
+            border: 2px solid #ccc;
+            background-color: #404040;
+            border-radius: 25px;
+            padding: 10px;
+        }
+        #label img { width:200px;}
     </style>
 </head>
 <body>
@@ -59,7 +70,7 @@
     <a href="mulit.html">demo地址</a>
 </button>
 <button class="add-btn  demo-remove" id="demo-remove">动态调用移动</button>
-
+<div id="label"></div>
 
 <div id="MyViewerDiv"></div>
 
@@ -71,12 +82,13 @@
 <script src="./static/snap.svg-min.js"></script>
 <!-- Developer JS -->
 <script>
-    // location.href = "mulit.html";
+    location.href = "mulit.html";
     // return;
-    var renderer = new THREE.WebGLRenderer();
+    // var renderer = new THREE.WebGLRenderer();
 
     var viewer = null;
     var path = "./bim/6/Sphere.svf";
+
     var options = {
         env: 'Local',
         offline: 'true',
@@ -87,7 +99,8 @@
         var viewerDiv = document.getElementById('MyViewerDiv');
         var config = {
             extensions: [
-                "Autodesk.Viewing.ZoomWindow"
+                "Autodesk.Viewing.ZoomWindow",
+                "Autodesk.Viewing.MarkupsCore"
             ],
             disabledExtensions: {
                 measure: false,
@@ -97,7 +110,6 @@
         viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
         viewer.start(path, null, onLoadModelSuccess, onLoadModelError);
         viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
-
             if (event.selections.length === 0) {
                 // viewer.clearThemingColors();
                 return;
@@ -115,7 +127,41 @@
         console.log('onLoadModelSuccess()!');
         console.log('Validate model loaded: ' + (viewer.model === model));
         console.log(model.getData());
-        viewer.fitToView([2], model);
+/*        var extension = viewer.getExtension("Autodesk.Viewing.MarkupsCore");
+        extension.enterEditMode();
+        const cloud = new Autodesk.Viewing.Extensions.Markups.Core.EditModeText( extension );
+        extension.changeEditMode( cloud );
+        const markupsPersist = extension.generateData()
+// 当前画面的状态 (zoom, direction, sections)
+        const viewerStatePersist = extension.viewer.getState()
+        // 回复先前制作涂丫时的 Viewer 画面的状态
+        extension.viewer.restoreState( viewerStatePersist );
+// 在 MyLayer 图层上重现涂丫
+        extension.loadMarkups( markupsPersist, 'MyLayer' );*/
+// 离开编辑模式
+//         extension.leaveEditMode();
+// 隐藏涂丫工具，并回复导览工具
+//         extension.hide();
+        /*extension.clear();
+        extension.enterViewMode(); // Very important!!
+        extension.loadMarkups(markupsStringData, "Layer_1");*/
+
+        // extension.enterEditMode();
+        // extension.leaveEditMode();
+       /* var modeText = new Autodesk.Markups.Core.EditModeText(extension);
+        extension.changeEditMode(modeText);*/
+        /*var styleAttributes = ['stroke-width', 'stroke-color', 'stroke-opacity'];
+        var nsu = Autodesk.Viewing.Extensions.Markups.Core.Utils;
+        var styleObject = nsu.createStyle(styleAttributes, extension.viewer);
+        extension.setStyle(styleObject);*/
+        /*var markupsStringData = extension.generateData();
+// Erase all markups onscreen, then load markups back onto the view
+        extension.clear();
+        extension.enterViewMode(); // Very important!!
+        extension.loadMarkups(markupsStringData, "Layer_1");*/
+        // viewer.fitToView([2], model);
+        // 注册3D标记
+        // viewer.loadExtension("markup3d");
 
         viewer.addEventListener(
             Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
@@ -130,21 +176,20 @@
     // 操作模型移动
     $("#demo-remove").click(function () {
         var model = db[1].model;
-        var fragIdsArray = [0];
+        var fragIdsArray = [2];
         var i = 1;
         var timer = setInterval(function () {
-            fragIdsArray.forEach((fragId, idx) => {
-                var fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+            // fragIdsArray.forEach((fragId, idx) => {
+                var fragProxy = viewer.impl.getFragmentProxy(model,2);
 
                 fragProxy.getAnimTransform();
 
                 fragProxy.position.x += 0.005;
-                fragProxy.position.z += 0.005;
+                fragProxy.position.y += 0.005;
 
                 fragProxy.updateAnimTransform();
-            });
+            // });
             viewer.impl.sceneUpdated(true);
-
             i++;
             if(i>= 50) clearInterval(timer)
         },30);
@@ -188,9 +233,38 @@
             Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
             _onGeometryLoaded);
     }
+
+    function initializeMarkup(){
+        var elem = $("#label");
+        // create 20 random markup points
+        // where icon is 0="Issue", 1="BIMIQ_Warning", 2="RFI", 3="BIMIQ_Hazard"
+        var dummyData = [];
+        for (let i=0; i<20; i++) {
+            dummyData.push({
+                icon:  Math.round(Math.random()*3),
+                x: Math.random()*300-150,
+                y: Math.random()*50-20,
+                z: Math.random()*150-130
+            });
+        }
+        window.dispatchEvent(new CustomEvent('newData', {'detail': dummyData}));
+
+        function moveLabel(p) {
+            elem.style.left = ((p.x + 1)/2 * window.innerWidth) + 'px';
+            elem.style.top =  (-(p.y - 1)/2 * window.innerHeight) + 'px';
+        }
+        // listen for the 'Markup' event, to re-position our <DIV> POPUP box
+        window.addEventListener("onMarkupMove", e=>{moveLabel(e.detail)}, false)
+        window.addEventListener("onMarkupClick", e=>{
+            elem.style.display = "block";
+            moveLabel(e.detail);
+            elem.innerHTML = `<img src="img/${(e.detail.id%6)}.jpg"><br>Markup ID:${e.detail.id}`;
+        }, false);
+    }
+
     function init(){
         //delegate the mouse click event
-        $(viewer.container).bind("click", onMouseClick);
+        // $(viewer.container).bind("click", onMouseClick);
         //delegate the event of CAMERA_CHANGE_EVENT
         viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, function(rt){
             //find out all pushpin markups
@@ -246,7 +320,6 @@
     }
 
     function drawPushpin(pushpinModelPt){
-
         //convert 3D position to 2D screen coordination
         var screenpoint = viewer.worldToClient(
             new THREE.Vector3(pushpinModelPt.x,
@@ -255,7 +328,7 @@
         //build the div container
         var randomId = makeid();
         var htmlMarker = '<div id="mymk' + randomId + '" class="tag-name">张三</div>';
-        var parent = viewer.container
+        var parent = viewer.container;
         $(parent).append(htmlMarker);
        /* $('#mymk'+randomId ).css({
             'pointer-events': 'none',
@@ -445,5 +518,8 @@
         };
     }
 </script>
+
+<script src="./static/markupExt.js"></script>
+
 </body>
 </html>

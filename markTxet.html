@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文字标记</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .tag-name {
+            pointer-events: none;
+            width: 80px;
+            height: 36px;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 36px;
+            position: absolute;
+            overflow: visible;
+            color: #FF3333;
+            background: rgba(249, 205, 205, .4);
+            text-align: center;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div id="MyViewerDiv"></div>
+
+<script src="./static/jquery.min.js"></script>
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+<script>
+
+    var viewer = null;
+    var path = "./bim/6/Sphere.svf";
+    var options = {
+        env: 'Local',
+        offline: 'true',
+        useADP: false,
+    };
+    var db = {};
+    Autodesk.Viewing.Initializer(options, function onInitialized() {
+        var viewerDiv = document.getElementById('MyViewerDiv');
+        var config = {
+            extensions: [
+                "Autodesk.Viewing.ZoomWindow",
+                "Autodesk.Viewing.MarkupsCore"
+            ],
+            disabledExtensions: {
+                measure: false,
+                section: false,
+            }
+        };
+        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+        viewer.start(path, null, onLoadModelSuccess, onLoadModelError);
+        viewer.loadModel(path, {
+            globalOffset: {
+                x: 2.9802322387695312e-8,
+                y: 1,
+                z: 5.288600168906754e-9
+            }
+        }, onLoadModelSuccess, onLoadModelError);
+
+        viewer.addEventListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, function (event) {
+
+            if (event.selections.length === 0) {
+                // viewer.clearThemingColors();
+                return;
+            }
+
+            var color = new THREE.Vector4(0, 0.5, 0, 1);
+            var id = event.selections[0].dbIdArray[0];
+            viewer.setThemingColor(id, color);
+            console.log(event); // 当前选中信息集
+        });
+
+        viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, function (rvt) {
+            //find out all pushpin markups
+            var $eles = $("div[id^='mymk']");
+            var DOMeles = $eles.get();
+            for (var index in DOMeles) {
+                //get each DOM element
+                var DOMEle = DOMeles[index];
+                var divEle = $('#' + DOMEle.id);
+                //get out the 3D coordination
+                var val = divEle.data('3DData');
+                var pushpinModelPt = JSON.parse(val);
+                //get the updated screen point
+                /*var screenpoint = viewer.worldToClient(new THREE.Vector3(
+                    pushpinModelPt.x,
+                    pushpinModelPt.y,
+                    pushpinModelPt.z,));*/
+                var screenpoint = worldToClient(pushpinModelPt.id, db[pushpinModelPt.mid]);
+                    //update the SVG position.
+                divEle.css({
+                    'left': screenpoint.x,
+                    'top': screenpoint.y
+                });
+            }
+        });
+    });
+
+    // 加载成功回调
+    function onLoadModelSuccess(model) {
+        db[model.id] = model;
+        setTimeout(function () {
+            drawPushpin(2, model)
+        }, 1000);
+        viewer.addEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            evt => onGeometryLoaded(evt, model));
+    }
+
+    // 加完完毕回调
+    function onGeometryLoaded(evt,model) {
+        /*var model = evt.model;
+        viewer.model.getExternalIdMapping(function (e) {
+            var array = Object.values(e);
+            const dbIdPP = {}
+            array.forEach( dbId => {
+                var it = model.getData().instanceTree;
+                it.enumNodeFragments(dbId, (fragId) => {
+                    var nodebBox = new THREE.Box3();
+                    var fragbBox = new THREE.Box3();
+                    var fragList = model.getFragmentList();
+                    fragList.getWorldBounds(fragId, fragbBox);
+                    nodebBox.union(fragbBox);
+                    const { max, min } = nodebBox
+                    const pivotPoint = { x: (max.x + min.x) / 2, y: (max.y + min.y) / 2, z: (max.z + min.z) / 2 }
+                    const pivotPointMin = { x: (min.x), y: (min.y), z: (min.z) }
+                    const pivotPointMax = { x: (max.x), y: (max.y), z: (max.z) }
+                    dbIdPP[dbId] = {}
+                    dbIdPP[dbId].max = viewer.impl.worldToClient(pivotPointMax)
+                    dbIdPP[dbId].min = viewer.impl.worldToClient(pivotPointMin)
+                    dbIdPP[dbId].pivot = viewer.impl.worldToClient(pivotPoint)
+                }, true);
+                console.log(dbIdPP)
+            })
+        },function (e) {
+            console.log(e,2)
+        })*/
+
+        viewer.removeEventListener(
+            Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+            onGeometryLoaded);
+    }
+
+    // 生成div标签id
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
+
+    // 生成标签 - 问题：内计算位置的方法除第一个外，位置错误
+    function drawPushpin(id, model) {
+        var screenpoint = worldToClient(id, model);
+        //convert 3D position to 2D screen coordination
+        /*var screenpoint = viewer.worldToClient(
+            new THREE.Vector3(pushpinModelPt.x,
+                pushpinModelPt.y,
+                pushpinModelPt.z,));*/
+        //build the div container
+        var randomId = makeid();
+        var htmlMarker = '<div id="mymk' + randomId + '" class="tag-name">张三</div>';
+        var parent = viewer.container;
+        $(parent).append(htmlMarker);
+        //build the svg element and draw a circle
+        //adjust to make the circle center is the position of the click point
+        var $container = $('#mymk' + randomId);
+        $container.css({
+            'left': screenpoint.x,
+            'top': screenpoint.y
+        });
+
+        //store 3D point data to the DOM
+        var div = $('#mymk' + randomId);
+        //add radius info with the 3D data
+        // var storeData = JSON.stringify(screenpoint);
+        var storeData = JSON.stringify({id: id, mid: model.id});
+
+        div.data('3DData', storeData);
+    }
+
+    // 另一个计算屏幕位置的方法
+    function worldToClient(dbid, model) {
+        var it = model.getData().instanceTree;
+        var gps = null;
+        it.enumNodeFragments(dbid, (fragId, dbid) => {
+            var nodebBox = new THREE.Box3();
+            var fragbBox = new THREE.Box3();
+            var fragList = model.getFragmentList();
+            fragList.getWorldBounds(fragId, fragbBox);
+            nodebBox.union(fragbBox);
+            var center = nodebBox.center();
+            gps = viewer.worldToClient(center);
+        }, true);
+        return gps;
+    }
+
+    // 加载失败回调
+    function onLoadModelError(err) {
+
+    }
+</script>
+</body>
+</html>

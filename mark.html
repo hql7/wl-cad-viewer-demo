@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加3D标记</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #MyViewerDiv {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-color: #F0F8FF;
+        }
+
+        #label {
+            position: fixed;
+            z-index: 2;
+            width: 80px;
+            height: 36px;
+            line-height: 36px;
+            background-color: rgba(254, 57, 57, .4);
+            border-radius: 3px;
+            padding: 10px;
+        }
+
+        #label img {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div id="label"></div>
+<div id="MyViewerDiv"></div>
+
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+<script src="./static/jquery.min.js"></script>
+<script src="./static/markupExt.js"></script>
+<script>
+    var viewer = null;
+    var path = "./bim/6/Sphere.svf";
+    var options = {
+        env: 'Local',
+        offline: 'true',
+        useConsolidation: true,
+        useADP: false,
+    };
+
+    Autodesk.Viewing.Initializer(options, function onInitialized() {
+        var viewerDiv = document.getElementById('MyViewerDiv');
+        var config = {
+            extensions: [
+                "Autodesk.Viewing.ZoomWindow"
+            ],
+            disabledExtensions: {
+                measure: false,
+                section: false,
+            }
+        };
+        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+        viewer.start(path, null, onLoadModelSuccess, onLoadModelError);
+    });
+
+    function onLoadModelSuccess(model) {
+        viewer.loadExtension("markup3d");
+        initializeMarkup();
+    }
+
+    function initializeMarkup() {
+        var elem = document.getElementById('label');
+        // create 20 random markup points
+        // where icon is 0="Issue", 1="BIMIQ_Warning", 2="RFI", 3="BIMIQ_Hazard"
+        var dummyData = [];
+        // for (let i = 0; i < 20; i++) {
+            dummyData.push({
+                icon: Math.round(Math.random() * 3),
+                x: Math.random() * 300 - 150,
+                y: Math.random() * 50 - 20,
+                z: Math.random() * 150 - 100
+            });
+        // }
+        window.dispatchEvent(new CustomEvent("newData", {detail: dummyData}));
+
+        function moveLabel(p) {
+            elem.style.left = ((p.x + 1) / 2) * window.innerWidth + "px";
+            elem.style.top = (-(p.y - 1) / 2) * window.innerHeight + "px";
+        }
+
+        // listen for the 'Markup' event, to re-position our <DIV> POPUP box
+        window.addEventListener(
+            "onMarkupMove",
+            e => {
+                moveLabel(e.detail);
+            },
+            false
+        );
+        window.addEventListener(
+            "onMarkupClick",
+            e => {
+                // elem.style.display = "block";
+                moveLabel(e.detail);
+                elem.innerHTML = "张三";
+            },
+            false
+        );
+    }
+
+    function onLoadModelError() {
+
+    }
+
+
+    /*// 旋转扩展
+    class RotateExt extends Autodesk.Viewing.Extension {
+        varructor(viewer, options) {
+            super();
+        }
+
+        load() {
+            viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+            return true;
+        }
+
+        unload() {
+            viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+            return true;
+        }
+
+        /!**!
+         * 关键函数
+         *!/
+        onSelectionChanged(event) {
+            console.log(event, 1)
+            var quaternion = new THREE.Quaternion();
+            // 设置旋转量 - 依 Y 轴旋转构件 180 度
+            quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+
+            var model = event.model;
+            var fragIdsArray = event.fragIdsArray;
+
+            fragIdsArray.forEach((fragId, idx) => {
+                var fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
+
+                fragProxy.getAnimTransform();
+
+                var position = new THREE.Vector3(fragProxy.position.x, fragProxy.position.y, fragProxy.position.z);
+                position.applyQuaternion(quaternion);
+
+                fragProxy.position = position;
+                fragProxy.quaternion.multiplyQuaternions(quaternion, fragProxy.quaternion);
+
+                if (idx === 0) {
+                    var euler = new THREE.Euler();
+                    euler.setFromQuaternion(fragProxy.quaternion, 0);
+                }
+
+                fragProxy.updateAnimTransform();
+            });
+
+            this.viewer.impl.sceneUpdated(true);
+        };
+    }
+
+    // 注册旋转扩展
+    Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.RotateTool', RotateExt);
+
+    // 移动扩展
+    class TranslateExt extends Autodesk.Viewing.Extension {
+        varructor(viewer, options) {
+            super();
+        }
+
+        load() {
+            viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+            return true;
+        }
+
+        unload() {
+            viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.onSelectionChanged);
+            return true;
+        }
+
+        /!**!
+         * 关键函数
+         *!/
+        onSelectionChanged(event) {
+
+            // 设置移动量 - 向 X 轴移动 -100 单位
+            var offset = new THREE.Vector3(-100, 0, 0);
+
+            var model = event.model;
+            var fragIdsArray = event.fragIdsArray;
+
+            fragIdsArray.forEach((fragId, idx) => {
+                var fragProxy = this.viewer.impl.getFragmentProxy(model, fragId);
+
+                fragProxy.getAnimTransform();
+
+                var position = new THREE.Vector3(
+                    fragProxy.position.x + offset.x,
+                    fragProxy.position.y + offset.y,
+                    fragProxy.position.z + offset.z
+                );
+
+                fragProxy.position = position;
+
+                fragProxy.updateAnimTransform();
+            });
+
+            this.viewer.impl.sceneUpdated(true);
+        };
+    }
+
+    // 注册移动扩展
+    Autodesk.Viewing.theExtensionManager.registerExtension('Autodesk.ADN.Viewing.Extension.TranslateTool', TranslateExt);*/
+</script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标记</title>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css"
+          type="text/css">
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #MyViewerDiv {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-color: #F0F8FF;
+        }
+    </style>
+</head>
+<body>
+<div id="MyViewerDiv"></div>
+
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
+<script>
+    // import PointCloudMarkup from 'static/PointCloudMarkup';
+
+
+    var viewer = null;
+    var path = "./bim/6/Sphere.svf";
+    var options = {
+        env: 'Local',
+        offline: 'true',
+        useConsolidation: true,
+        useADP: false,
+    };
+
+    Autodesk.Viewing.Initializer(options, function onInitialized() {
+        var viewerDiv = document.getElementById('MyViewerDiv');
+        var config = {
+            extensions: [
+                "Autodesk.Viewing.ZoomWindow",
+                "Viewing.Extension.Text"
+                // "Viewing.Extension.PointCloudMarkup"
+            ],
+            disabledExtensions: {
+                measure: false,
+                section: false,
+            }
+        };
+        viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+        viewer.start(path, null, onLoadModelSuccess, onLoadModelError);
+    });
+
+    /*    class PointCloudMarkupExtension extends Autodesk.Viewing.Extension {
+            constructor(viewer, options) {
+                super(viewer, options);
+
+                this.runAnimation = false
+            }
+
+            load() {
+                this.viewer.setProgressiveRendering(false);
+                this.viewer.setGhosting(false);
+                this.options.loader.show(false);
+
+                console.log(this.viewer)
+                const model = this.viewer.activeModel ||
+                    this.viewer.model;
+                if (model) {
+                    this.onObjectTreeCreated()
+                }
+                console.log("Viewing.Extension.PointCloudMarkup loaded");
+                return true
+            }
+            onObjectTreeCreated(){
+                this.pointCloudMarkup = new PointCloudMarkup(
+                    this.viewer, this.options.pointCloudMarkup)
+            }
+
+            unload(){
+                this.pointCloudMarkup.destroy()
+            }
+        }
+
+        Autodesk.Viewing.theExtensionManager.registerExtension(
+            "Viewing.Extension.PointCloudMarkup",
+            PointCloudMarkupExtension);*/
+
+    /*class TextExtension extends Autodesk.Viewing.Extension {
+        /////////////////////////////////////////////////////////
+        // Adds a color material to the viewer
+        //
+        /////////////////////////////////////////////////////////
+        constructor(viewer, options) {
+            super();
+            this.viewer = viewer
+        }
+
+        load() {
+            return true
+        }
+
+        unload() {
+            return true
+        }
+
+        /////////////////////////////////////////////////////////
+        // Adds a color material to the viewer
+        //
+        /////////////////////////////////////////////////////////
+        createColorMaterial(color) {
+            console.log(color)
+            const material = new THREE.MeshPhongMaterial({
+                specular: new THREE.Color(color),
+                side: THREE.DoubleSide,
+                reflectivity: 0.0,
+                color
+            })
+
+            const materials = this.viewer.impl.getMaterials()
+            materials.addMaterial(
+                color.toString(),
+                material,
+                true)
+
+            return material
+        }
+
+        /////////////////////////////////////////////////////////
+        // Wraps TextGeometry object and adds a new mesh to
+        // the scene
+        /////////////////////////////////////////////////////////
+        createText(params) {
+            console.log(params)
+            const geometry = new TextGeometry(params.text,
+                Object.assign({}, {
+                    params
+                }))
+
+            const material = this.createColorMaterial(
+                params.color)
+
+            const text = new THREE.Mesh(
+                geometry, material)
+
+            text.position.set(
+                params.position.x,
+                params.position.y,
+                params.position.z)
+
+            this.viewer.impl.scene.add(text)
+            this.viewer.impl.sceneUpdated(true)
+        }
+    }
+
+    Autodesk.Viewing.theExtensionManager.registerExtension(
+        'Viewing.Extension.Text', TextExtension);*/
+
+    function onLoadModelSuccess(model) {
+        console.log(model)
+        /*viewer.loadExtension('Viewing.Extension.Test').then((extension) => {
+            console.log(extension)
+            // 创建 3D 文字
+            extension.createText({
+                position: {x: -150, y: 50, z: 0},
+                bevelEnabled: true,
+                curveSegments: 24,
+                bevelThickness: 1,
+                color: 0xFFA500,
+                text: 'Forge!',
+                bevelSize: 1,
+                height: 1,
+                size: 1
+            })
+        })*/
+        /*const geometry = new THREE.Geometry ()
+
+        geometry.vertices.push (new THREE.Vector3 ( 0,  0,  0))
+        geometry.vertices.push (new THREE.Vector3 (10, 10, 10))
+
+        var linesMaterial = new THREE.LineBasicMaterial ({
+            color: new THREE.Color (0xFF0000),
+            transparent: true,
+            depthWrite: false,
+            depthTest: true,
+            linewidth: 10,
+            opacity: 1.0
+        })
+
+        var lines = new THREE.Line (geometry,
+            linesMaterial,
+            THREE.LinePieces)
+        viewer.impl.sceneAfter.add(lines)
+        viewer.impl.invalidate (true)*/
+        // var pos = new THREE.Vector3();
+        // var quat = new THREE.Quaternion();
+        // pos.set(Math.random(), 2, Math.random());
+        // quat.set(0, 0, 0, 1);
+        // pos.set(1,2,3);
+        var material = new THREE.MeshPhongMaterial({color: "0xFF0000"});
+        var threeObject = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1, 1, 1, 1), material);
+        viewer.impl.sceneAfter.add(threeObject)
+        viewer.impl.invalidate (true)
+
+    }
+
+    function onLoadModelError(err) {
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "autodesk-viewer-mulit",
+  "version": "1.0.0",
+  "description": "* index.html为单个功能试验\r * demo.html为简单例子演示\r * mulit.html为有序加载多模型示例(使用es6) - 持续开发中\r * v6.html为无序加载多模型示例 - 持续开发中\r * 其他暂不可用\r > 转化后的文件为svf格式",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel static --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hql7/autodesk-viewer-mulit.git"
+  },
+  "author": "weilan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hql7/autodesk-viewer-mulit/issues"
+  },
+  "homepage": "https://github.com/hql7/autodesk-viewer-mulit#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
